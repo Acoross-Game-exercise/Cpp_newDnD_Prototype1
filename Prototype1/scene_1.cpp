@@ -4,63 +4,49 @@
 #include <conio.h>
 #include <stdlib.h>
 
-#include "Util.h"
-#include "MyCharacter.h"
+#include <functional>
 
-PlayerCharacter g_PC;
+#include "Util.h"
+
+#include "MyCharacter.h"
+#include "BattleCharacter.h"
+#include "Battle.h"
+
+extern PlayerCharacter g_PC;
 
 namespace Scene
 {
-	bool __stdcall RunScript(const wchar_t* Script[], unsigned long dwMilliSeconds = 1000);
-
-	// '\0' 으로 시작하는 문자열이 나올 때 까지 문자열을 출력한다.	
-	bool __stdcall RunScript(const wchar_t* Script[], unsigned long dwMilliSeconds)
+	class Goblin : public BattleCharacter
 	{
-		int iStr = 0;
+	public:
+		Goblin() : BattleCharacter(L"고블린") { ; }
 
-		bool ret = true;
-
-		try
+		virtual void DoAttack(Battle& battle, BattleCharacter* pEnemy)
 		{
-			while (true)
+			Script::RunFormattedScript(L"%s이 %s을 공격한다!\n", Name, pEnemy->Name);
+			
+			OnMiss();
+		}
+
+		virtual void OnDamaged(int nDamage)
+		{
+			const wchar_t* strings[] =
 			{
-				const wchar_t* tmpStr = Script[iStr++];
+				L"고블린에게 공격이 명중했다!\n",
+				L"당신이 고블린을 치면 고블린은 소리를 지르며 통로를 따라 여둠 속으로 달아나 버린다. ",
+				L"(고블린들은 어두운 곳에서도 볼 수 있다). ",
 
-				if (tmpStr[0] == L'\0')
-				{
-					break;
-				}
-				if (tmpStr[0] == L'\1')
-				{
-					wprintf(L"(enter...)\n");
-					_getch();
+				L"\0"
+			};
 
-				}
-				else
-				{
-					wprintf(tmpStr);
-					Console::Wait(dwMilliSeconds);
-				}
-			}
+			Script::RunScript(strings);
+
+			HP = 0;
 		}
-		catch (const std::exception&)
-		{
-			ret = false;
-		}
-
-		return ret;
-	}
+	};
 
 	bool __stdcall RunScene1()
 	{
-		// InitCharacter
-		g_PC.STR = 17;
-		g_PC.AGL = 11;
-		g_PC.INT = 9;
-		g_PC.CON = 16;
-
-		g_PC.HP = 8;
-
 		// 도입. 상황 설명.
 		{
 			const wchar_t* strings[] =
@@ -82,64 +68,44 @@ namespace Scene
 				L"\0"	// string end
 			};
 
-			if (false == RunScript(strings))
-			{
-				wprintf(L"error! RunScript error. [%s][%d]", TEXT(__FILE__), __LINE__);
-				_getch();
-			}
+			Script::RunScript(strings);
 		}
 		
-		system("cls");
-		wprintf(L"고블린과의 전투\n\n");
-
-		// 고블린과의 전투
-		while (true)
-		{
-			wprintf(L"(enter...)\n");
-
-			_getch();
-
-			// 주사위를 굴린다.
-			int d20 = rand() % 20 + 1;
-			wprintf(L"\nd20: ");
-			Console::Wait(1000);
-
-			wprintf(L"%d!!\n", d20);
-			Console::Wait(1000);
-
-			if (d20 > 11)	// 명중
-			{
-				const wchar_t* strings[] =
-				{
-					L"고블린에게 공격이 명중했다!\n",
-					L"당신이 고블린을 치면 고블린은 소리를 지르며 통로를 따라 여둠 속으로 달아나 버린다. ",
-					L"(고블린들은 어두운 곳에서도 볼 수 있다). ",
-					L"\1",
-
-					L"\0"
-				};
-
-				RunScript(strings);
-				break;
-			}
-			else // 실패
-			{
-				const wchar_t* strings[] =
-				{
-					L"당신의 공격이 빗나갔다.\n",
-					L"고블린이 당신을 공격한다!\n",
-					L"그러나 고블린의 공격은 빗나갔다. ",
-
-					L"\0"
-				};
-
-				RunScript(strings);
-			}
-		}
+		Goblin goblin;
+		goblin.HP = 3;
+		goblin.toHit = 12;
+		
+		RunBattle(&goblin);
 				
 		return RunScene2();
 	}
+	
 
+	class Snake : public BattleCharacter
+	{
+	public:
+		Snake() : BattleCharacter(L"뱀") { ; }
+
+		virtual void DoAttack(Battle& battle, BattleCharacter* pEnemy)
+		{
+			Script::RunFormattedScript(L"%s이 %s을 공격한다!\n", Name, pEnemy->Name);
+
+			if (battle.nRound == 1)	// 첫 라운드에만 뱀의 공격이 명중한다.
+			{
+				OnHit();
+
+				g_PC.OnDamaged(1);
+
+				// 중독 되었는지 체크한다. -> 내성굴림
+				g_PC.CheckAndDealPoison();
+			}
+			else
+			{
+				OnMiss();
+			}
+		}
+	};
+	
 	bool __stdcall RunScene2()
 	{
 		Console::Wait(1000);
@@ -159,98 +125,21 @@ namespace Scene
 				L"당신은 무엇이 있나 살피려고 램프를 비추면서 주의 깊게 방 쪽으로 간다. ",
 				L"당신의 왼쪽 방 구석에서 \"쉿쉿\"하는 소리가 들린다. ",
 				L"그리고 거기에는 길이가 거의 3미터나 되는 거대한 방울뱀이 있다! ",
-				L"뱀 가까이, 바닥에는 수백 개의 금화와 은화가 쌓여 있다.\n",
+				L"뱀 가까이, 바닥에는 수백 개의 금화와 은화가 쌓여 있다.\n\n",
+				L"보물을 손에 넣으려면 싸울 수 밖에 없다!!\n",
 				L"\1",
 
 				L"\0"
 			};
 
-			RunScript(strings);
+			Script::RunScript(strings);
 		}
 
-		system("cls");
+		Snake snake;
+		snake.HP = 3;
+		snake.toHit = 11;
 
-		wprintf(L"뱀과의 전투!!!\n\n");
-
-		// 뱀과의 전투
-		int snake_HP = 3;
-		bool bFirstRound = true;
-		while (true)
-		{
-			wprintf(L"(enter...)\n");
-
-			_getch();
-
-			// 주사위를 굴린다.
-			int d20 = rand() % 20 + 1;
-			wprintf(L"\nd20: ");
-			Console::Wait(1000);
-
-			wprintf(L"%d!!\n", d20);
-			Console::Wait(1000);
-
-			// 내 행동
-			if (d20 >= 11)	// 명중
-			{
-				const wchar_t* strings[] =
-				{
-					L"뱀에게 당신의 공격이 명중했다!\n",
-					L"뱀은 1의 피해를 입었다!\n",
-					L"\1",
-
-					L"\0"
-				};
-
-				RunScript(strings);
-
-				snake_HP -= 1;
-
-				if (snake_HP <= 0)
-				{
-					break;
-				}
-			}
-			else // 실패
-			{
-				const wchar_t* strings[] =
-				{
-					L"당신의 공격이 빗나갔다.\n",
-					L"\0"
-				};
-
-				RunScript(strings);
-			}
-
-			// 뱀의 행동
-			if (bFirstRound)	// 첫 라운드에만 뱀의 공격이 명중한다.
-			{
-				bFirstRound = false;
-
-				const wchar_t* strings[] =
-				{
-					L"뱀이 당신을 공격한다!\n",
-					L"뱀의 공격이 명중했다!!",
-					L"\0"
-				};
-
-				RunScript(strings);
-
-				// 중독 되었는지 체크한다.
-
-			}
-			else
-			{
-				const wchar_t* strings[] =
-				{
-					L"뱀이 당신을 공격한다!\n",
-					L"그러나 뱀의 공격은 빗나갔다. ",
-					L"\0"
-				};
-
-				RunScript(strings);
-			}
-		}
-		
+		RunBattle(&snake);
 
 		printf("\n");
 		printf("\n");
