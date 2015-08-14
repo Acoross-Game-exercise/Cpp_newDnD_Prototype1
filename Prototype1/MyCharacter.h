@@ -8,9 +8,9 @@ class PlayerCharacter : public BattleCharacter
 public:
 	PlayerCharacter() : BattleCharacter(L"´ç½Å") { ; }
 	
-	virtual void CheckAndDealPoison();
+	virtual bool CheckResistance(ResistanceType RT);
 
-	virtual void DoAttack(Battle& battle, BattleCharacter* pEnemy);
+	virtual void DoAttack(CBattle* pBattle, BattleCharacter* pEnemy);
 };
 
 #endif //_MY_CHARACTER_

@@ -31,10 +31,12 @@ namespace Script
 
 	bool RunFormattedScript(wchar_t const* const _Format, ...)
 	{
+		//printf("====================================\n");
 		va_list _ArgList;
 		va_start(_ArgList, _Format);
 		vwprintf(_Format, _ArgList);
 		va_end(_ArgList);
+		//printf("====================================\n");
 
 		Console::Wait(DEFAULT_WAIT);
 
@@ -58,10 +60,13 @@ namespace Script
 				{
 					break;
 				}
-				if (tmpStr[0] == L'\1')
+				else if (tmpStr[0] == L'\1')
 				{
 					Script::Pause();
-
+				}
+				else if (tmpStr[0] == L'\2')
+				{
+					system("cls");
 				}
 				else
 				{

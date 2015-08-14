@@ -2,27 +2,22 @@
 
 #include <iostream>
 #include <conio.h>
+
 #include "Util.h"
 
-void PlayerCharacter::CheckAndDealPoison()
+bool PlayerCharacter::CheckResistance(ResistanceType RT) 
 {
 	{
-		const wchar_t* strings[] =
-		{
-			L"\n내성굴림: 독\n",
-			L"\0"
-		};
-
-		Script::RunScript(strings);
+		Script::RunFormattedScript(L"\n내성굴림: %s\n", strRegistance[RT]);
 	}
 
-	Script::Pause(L"(roll d20 to evade poison... ToEvade:%d)", toPoison);	
+	Script::Pause(L"(roll d20 to evade poison... ToEvade:%d)", nRegistance[RT]);
 
 	// 주사위를 굴린다.
 	int d20 = Dice::D20();
 
 	// 중독 되었는지 체크한다. -> 내성굴림
-	if (d20 > toPoison)	// 회피함
+	if (d20 > nRegistance[RT])	// 회피함
 	{
 		const wchar_t* strings[] =
 		{
@@ -31,24 +26,25 @@ void PlayerCharacter::CheckAndDealPoison()
 		};
 
 		Script::RunScript(strings);
+
+		return true;
 	}
 	else	// 독 피해
 	{
 		const wchar_t* strings[] =
 		{
 			L"내성굴림 실패!\n",
-			L"중독되었다!\n",
 
 			L"\0"
 		};
-		
+
 		Script::RunScript(strings);
 
-		OnDamaged(2);
+		return false;
 	}
-}
+};
 
-void PlayerCharacter::DoAttack(Battle& battle, BattleCharacter* pEnemy)
+void PlayerCharacter::DoAttack(CBattle* pBattle, BattleCharacter* pEnemy)
 {
 	int toHitEnemy = ToHitEnemy(this, pEnemy);
 

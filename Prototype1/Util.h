@@ -3,7 +3,11 @@
 
 #include <Windows.h>
 
-#define DEFAULT_WAIT 400
+#ifdef _DEBUG
+#define DEFAULT_WAIT 100
+#else
+#define DEFAULT_WAIT 800
+#endif
 
 namespace Console
 {

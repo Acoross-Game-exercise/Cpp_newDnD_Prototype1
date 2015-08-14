@@ -119,6 +119,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,14 +149,17 @@
   <ItemGroup>
     <ClCompile Include="BattleCharacter.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Monsters.cpp" />
     <ClCompile Include="MyCharacter.cpp" />
-    <ClCompile Include="scene_1.cpp" />
+    <ClCompile Include="scenes_2.cpp" />
+    <ClCompile Include="scenes_1.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Battle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Battle.h" />
     <ClInclude Include="BattleCharacter.h" />
+    <ClInclude Include="Monsters.h" />
     <ClInclude Include="MyCharacter.h" />
     <ClInclude Include="scenes_1.h" />
     <ClInclude Include="Util.h" />
