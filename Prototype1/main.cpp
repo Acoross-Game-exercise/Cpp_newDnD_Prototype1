@@ -5,7 +5,10 @@
 #include "scenes.h"
 #include "MyCharacter.h"
 
-#include "Util.h"
+#include "ScriptDB.h"
+
+#include <algorithm>
+#include <string>
 
 extern PlayerCharacter g_PC;
 
@@ -29,13 +32,12 @@ int main(int argc, char* argv[])
 	g_PC.HPMax = 8;
 	g_PC.HP = 8;
 
-	Script::ScriptDB db;
-	db.Load(L"script.txt");
+	Script::g_ScriptDB.Load(L"script.txt");
 
 	//Scene::RunScene1();
 	//Scene::RunScene2();
 	//Scene::RunScene3();
-	//Scene::RunScene4();
+	Scene::RunScene4();
 
 	system("pause");
 

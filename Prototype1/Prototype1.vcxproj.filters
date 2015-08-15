@@ -19,6 +19,9 @@
     <Filter Include="Scenes">
       <UniqueIdentifier>{f2d98ca1-62b7-43a4-b291-d66481e4c4a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{234a70ab-5813-4d2b-818d-5d622fbfc3e7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -45,6 +48,9 @@
     <ClCompile Include="scenes_1.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptDB.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyCharacter.h">
@@ -64,6 +70,12 @@
     </ClInclude>
     <ClInclude Include="scenes.h">
       <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptDB.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="default.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
