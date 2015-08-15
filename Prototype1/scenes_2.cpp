@@ -1,4 +1,4 @@
-#include "scenes_1.h"
+#include "scenes.h"
 
 #include <iostream>
 #include <functional>

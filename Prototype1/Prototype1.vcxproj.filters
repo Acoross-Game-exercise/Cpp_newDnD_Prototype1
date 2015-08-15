@@ -62,7 +62,7 @@
     <ClInclude Include="Util.h">
       <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="scenes_1.h">
+    <ClInclude Include="scenes.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>

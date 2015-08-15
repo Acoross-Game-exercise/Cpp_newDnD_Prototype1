@@ -161,7 +161,7 @@
     <ClInclude Include="BattleCharacter.h" />
     <ClInclude Include="Monsters.h" />
     <ClInclude Include="MyCharacter.h" />
-    <ClInclude Include="scenes_1.h" />
+    <ClInclude Include="scenes.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
