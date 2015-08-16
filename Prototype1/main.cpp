@@ -50,7 +50,6 @@ int main(int argc, char* argv[])
 	
 	Scene::RunScenes();
 	
-
 	system("pause");
 
 	return 0;
