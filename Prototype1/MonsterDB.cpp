@@ -14,7 +14,7 @@ void InitMonsterDB_test()
 		goblin->HP = 3;
 		goblin->toHitMe = 12;
 		goblin->toHitBonus = -20; // 명중 불가
-		goblin->m_AttackPower = 1;
+		goblin->m_AttackPower = 2;
 	}
 
 	g_monsterDB.m_CreatureMap.insert(CreatureMap::value_type(1, goblin));
@@ -34,15 +34,4 @@ void InitMonsterDB_test()
 	}
 
 	g_monsterDB.m_CreatureMap.insert(CreatureMap::value_type(2, snake));
-
-	CCreature* goblin2 = new CCreature(L"고블린");
-	{
-		goblin2->m_nID = 3;
-		goblin2->HP = 2;
-		goblin2->toHitMe = 12;
-		goblin2->toHitBonus = 20;		// 첫 라운드 필중.
-		goblin2->m_AttackPower = 2;		// 공격력 2
-	}
-
-	g_monsterDB.m_CreatureMap.insert(CreatureMap::value_type(3, goblin2));
 }

@@ -39,9 +39,6 @@
     <ClCompile Include="Util.cpp">
       <Filter>Util</Filter>
     </ClCompile>
-    <ClCompile Include="scenes_1.cpp">
-      <Filter>Scenes</Filter>
-    </ClCompile>
     <ClCompile Include="CCreature.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -52,6 +49,12 @@
       <Filter>DB</Filter>
     </ClCompile>
     <ClCompile Include="SkillData.cpp">
+      <Filter>CppScripts</Filter>
+    </ClCompile>
+    <ClCompile Include="scenes.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleEventHandler.cpp">
       <Filter>CppScripts</Filter>
     </ClCompile>
   </ItemGroup>
@@ -81,6 +84,9 @@
       <Filter>DB</Filter>
     </ClInclude>
     <ClInclude Include="SkillData.h">
+      <Filter>CppScripts</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleEventHandler.h">
       <Filter>CppScripts</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,36 +3,37 @@
 #include <functional>
 
 #include "Util.h"
-
 #include "CCreature.h"
 #include "MyCharacter.h"
-
 #include "MonsterDB.h"
 
 PlayerCharacter g_PC;
-
-extern MonsterDB g_monsterDB;
 
 // return: true (pc win), false (enemy win)
 bool CBattle::RunBattle()
 {
 	CCreature* pEnemy = g_monsterDB.m_CreatureMap[m_nEnemyID];
-
 	if (nullptr == pEnemy)
 	{
 		return false;
 	}
-
 	m_pEnemy = pEnemy;
 
-	m_nRound = 0;
+	if (false == OnBattleStart(this))
+	{
+		return false;
+	}
+	
 	std::function<void(void)> printBattleState = [&pEnemy]()
 	{
 		// 적, 아군 상태 표시
-		wprintf(L"\n나\t%s\n", pEnemy->Name);
+		wprintf(L"\n===================================\n");
+		wprintf(L"나\t%s\n", pEnemy->Name);
 		wprintf(L"HP: %d\tHP: %d\n", g_PC.HP, pEnemy->HP);
+		wprintf(L"===================================\n");
 	};
-
+	
+	m_nRound = 0;
 	bool bRet = false;
 	while (true)
 	{
@@ -40,14 +41,14 @@ bool CBattle::RunBattle()
 
 		// 전투 소개 문구
 		system("cls");
-		Script::RunFormattedScript(L"%s과의 전투!!!\n", pEnemy->Name);
+		Script::RunFormattedScript(L"%s과의 전투!!!: Round %d\n", pEnemy->Name, m_nRound);
 
 		printBattleState();
 
 		// 내 행동
 		if (g_PC.DoAttack(this, pEnemy))
 		{
-			if (OnEnemyGotDamage(this) == false)
+			if (false == OnEnemyGotDamage(this))
 			{
 				bRet = true;
 				break;
@@ -77,7 +78,7 @@ bool CBattle::RunBattle()
 
 		if (pEnemy->HP <= 0)
 		{
-			Script::RunFormattedScript(L"당신은 %s에게 승리했다..", pEnemy->Name);
+			Script::RunFormattedScript(L"당신은 %s에게 승리했다..\n", pEnemy->Name);
 			bRet = true;
 			break;
 		}
