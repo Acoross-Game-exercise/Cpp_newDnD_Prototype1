@@ -4,11 +4,9 @@
 #include <functional>
 
 #include "Util.h"
-
-#include "MyCharacter.h"
 #include "BattleCharacter.h"
+#include "MyCharacter.h"
 #include "Battle.h"
-
 #include "ScriptDB.h"
 
 extern PlayerCharacter g_PC;
@@ -98,7 +96,7 @@ namespace Scene
 	
 	bool __stdcall RunScene2()
 	{
-		Console::Wait(1000);
+		Script::Pause();
 		system("cls");
 
 		Script::CScene* pScene = Script::g_ScriptDB.m_sceneMap[2];
@@ -119,7 +117,7 @@ namespace Scene
 
 	bool __stdcall RunScene3()
 	{
-		Console::Wait(1000);
+		Script::Pause();
 		system("cls");
 		
 		Script::CScene* pScene = Script::g_ScriptDB.m_sceneMap[3];

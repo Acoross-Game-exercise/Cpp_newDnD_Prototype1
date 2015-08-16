@@ -18,6 +18,7 @@ int main(int argc, char* argv[])
 
 	srand(time(nullptr));
 
+
 	// InitCharacter
 	g_PC.STR = 17;
 	g_PC.AGL = 11;
@@ -32,12 +33,16 @@ int main(int argc, char* argv[])
 	g_PC.HPMax = 8;
 	g_PC.HP = 8;
 
+
+
 	Script::g_ScriptDB.Load(L"script.txt");
 
 	//Scene::RunScene1();
 	//Scene::RunScene2();
 	//Scene::RunScene3();
 	Scene::RunScene4();
+
+
 
 	system("pause");
 

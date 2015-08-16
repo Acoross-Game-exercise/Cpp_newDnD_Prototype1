@@ -38,6 +38,8 @@ namespace Scene
 
 	bool __stdcall RunScene4()
 	{
+		Script::Pause();
+
 		Script::CScene* pScene = Script::g_ScriptDB.m_sceneMap[4];
 		Script::RunScript(pScene->m_Script, 100);
 
