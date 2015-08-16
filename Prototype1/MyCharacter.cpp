@@ -7,9 +7,7 @@
 
 bool PlayerCharacter::CheckResistance(ResistanceType RT) 
 {
-	{
-		Script::RunFormattedScript(L"\n내성굴림: %s\n", strRegistance[RT]);
-	}
+	Script::RunFormattedScript(L"\n내성굴림: %s\n", strRegistance[RT]);
 
 	Script::Pause(L"(roll d20 to evade poison... ToEvade:%d)", nRegistance[RT]);
 
@@ -44,7 +42,7 @@ bool PlayerCharacter::CheckResistance(ResistanceType RT)
 	}
 };
 
-void PlayerCharacter::DoAttack(CBattle* pBattle, BattleCharacter* pEnemy)
+bool PlayerCharacter::DoAttack(CBattle* pBattle, CCreature* pEnemy)
 {
 	int toHitEnemy = ToHitEnemy(this, pEnemy);
 
@@ -54,9 +52,12 @@ void PlayerCharacter::DoAttack(CBattle* pBattle, BattleCharacter* pEnemy)
 	int d20 = Dice::D20();
 	if (d20 >= toHitEnemy)	// 명중
 	{
-		Script::RunFormattedScript(L"%s에게 당신의 공격이 명중했다!\n", pEnemy->Name);
+		OnHitMessage();
+		//Script::RunFormattedScript(L"%s에게 당신의 공격이 명중했다!\n", pEnemy->Name);
 
 		pEnemy->OnDamaged(1);
+
+		return true;
 	}
 	else // 실패
 	{
@@ -67,5 +68,7 @@ void PlayerCharacter::DoAttack(CBattle* pBattle, BattleCharacter* pEnemy)
 		};
 
 		Script::RunScript(strings);
+
+		return false;
 	}
 }

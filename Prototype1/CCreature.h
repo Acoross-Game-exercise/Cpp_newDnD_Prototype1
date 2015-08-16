@@ -1,6 +1,10 @@
 #ifndef _BATTLE_CHARACTER_
 #define _BATTLE_CHARACTER_
 
+#include <list>
+
+#include "SkillData.h"
+
 enum ResistanceType
 {
 	RT_POISON,
@@ -9,10 +13,13 @@ enum ResistanceType
 };
 
 class CBattle;
+class CSkill;
 
-class BattleCharacter
+class CCreature
 {
 public:
+	int m_nID;
+
 	int HPMax;
 	int HP;
 	const wchar_t* Name;
@@ -35,29 +42,34 @@ public:
 // </내성치>
 
 // <임시>
-	int toHit;
+	int toHitMe;
+	int toHitBonus;
+	int m_AttackPower;
+	CSkill* m_pAttackSkill;
 // </임시>
 
-	BattleCharacter(const wchar_t* name) : Name(name) 
+	CCreature(const wchar_t* name) : m_nID(0), HPMax(1), HP(1), Name(name), 
+		STR(0), AGL(0), INT(0), CON(0), WIS(0), CHA(0),
+		toHitMe(0), toHitBonus(0), m_AttackPower(1), m_pAttackSkill(nullptr)
 	{
-		; 
+		memset(nRegistance, 0, sizeof(int) * RT_MAX);
 	}
 
-	virtual ~BattleCharacter();
+	virtual ~CCreature();
 
 	virtual void OnHealed(int nHealed);
 
 	virtual void OnDamaged(int nDamage);
 
-	virtual void OnHit();
+	virtual void OnHitMessage();
 
-	virtual void OnMiss();
+	virtual void OnMissMessage();
 	
 	virtual bool CheckResistance(ResistanceType RT) { return true; };
 
-	virtual void DoAttack(CBattle* pBattle, BattleCharacter* pEnemy) = 0;
+	virtual bool DoAttack(CBattle* pBattle, CCreature* pEnemy);
 };
 
-int ToHitEnemy(BattleCharacter* pAttacker, BattleCharacter* pTarget);
+int ToHitEnemy(CCreature* pAttacker, CCreature* pTarget);
 
 #endif

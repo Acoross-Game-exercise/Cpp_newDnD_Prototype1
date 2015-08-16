@@ -4,20 +4,28 @@
 
 #include "Util.h"
 
-#include "BattleCharacter.h"
+#include "CCreature.h"
 #include "MyCharacter.h"
+
+#include "MonsterDB.h"
 
 PlayerCharacter g_PC;
 
-bool CBattle::RunBattle(BattleCharacter* pEnemy)
+extern MonsterDB g_monsterDB;
+
+// return: true (pc win), false (enemy win)
+bool CBattle::RunBattle()
 {
+	CCreature* pEnemy = g_monsterDB.m_CreatureMap[m_nEnemyID];
+
 	if (nullptr == pEnemy)
 	{
 		return false;
 	}
 
-	m_nRound = 0;
+	m_pEnemy = pEnemy;
 
+	m_nRound = 0;
 	std::function<void(void)> printBattleState = [&pEnemy]()
 	{
 		// 적, 아군 상태 표시
@@ -37,7 +45,14 @@ bool CBattle::RunBattle(BattleCharacter* pEnemy)
 		printBattleState();
 
 		// 내 행동
-		g_PC.DoAttack(this, pEnemy);
+		if (g_PC.DoAttack(this, pEnemy))
+		{
+			if (OnEnemyGotDamage(this) == false)
+			{
+				bRet = true;
+				break;
+			}
+		}
 
 		// 적의 행동
 		if (pEnemy->HP > 0)
@@ -69,6 +84,8 @@ bool CBattle::RunBattle(BattleCharacter* pEnemy)
 
 		Script::Pause();
 	}
+
+	OnBattleEnd(this);
 
 	return bRet;
 }

@@ -1,16 +1,17 @@
 #ifndef _MY_CHARACTER_
 #define _MY_CHARACTER_
 
-#include "BattleCharacter.h"
+#include "CCreature.h"
 
-class PlayerCharacter : public BattleCharacter
+class PlayerCharacter : public CCreature
 {
 public:
-	PlayerCharacter() : BattleCharacter(L"당신") { ; }
+
+	PlayerCharacter() : CCreature(L"당신") { ; }
 	
 	virtual bool CheckResistance(ResistanceType RT);
 
-	virtual void DoAttack(CBattle* pBattle, BattleCharacter* pEnemy);
+	virtual bool DoAttack(CBattle* pBattle, CCreature* pEnemy);
 };
 
 #endif //_MY_CHARACTER_

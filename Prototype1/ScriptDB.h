@@ -19,8 +19,7 @@ namespace Script
 		ScriptData m_Script;
 	};
 	// Scene end /////////////////
-
-
+	
 
 	// ScriptDB begin ////////////
 	typedef std::unordered_map<int, CScene*> SceneMap;
@@ -43,7 +42,8 @@ namespace Script
 	extern ScriptDB g_ScriptDB;
 
 	// ScriptDB end /////////////
-
+	
+	bool __stdcall RunScript(int nNum);
 	bool __stdcall RunScript(ScriptData& sd, unsigned long dwMilliSeconds = DEFAULT_WAIT);
 }
 

@@ -14,6 +14,17 @@ namespace Script
 {
 	ScriptDB g_ScriptDB;
 
+	bool __stdcall RunScript(int nNum)
+	{
+		Script::CScene* pScene = Script::g_ScriptDB.m_sceneMap[nNum];
+		if (pScene)
+		{
+			return Script::RunScript(pScene->m_Script);
+		}
+
+		return false;
+	}
+
 	bool __stdcall RunScript(ScriptData& sd, unsigned long dwMilliSeconds)
 	{
 		bool ret = true;

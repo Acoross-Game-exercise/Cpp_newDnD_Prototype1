@@ -20,7 +20,7 @@ namespace Script
 
 namespace Dice
 {
-	int D20();
+	int D20(bool bPause = true);
 }
 
 #endif

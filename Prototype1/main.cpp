@@ -1,14 +1,16 @@
 #include <iostream>
-#include "locale.h"
+#include <locale.h>
 #include <time.h>
-
-#include "scenes.h"
-#include "MyCharacter.h"
-
-#include "ScriptDB.h"
-
 #include <algorithm>
 #include <string>
+
+// for init
+#include "ScriptDB.h"
+#include "MonsterDB.h"
+#include "MyCharacter.h"
+//
+
+#include "scenes.h"
 
 extern PlayerCharacter g_PC;
 
@@ -17,8 +19,7 @@ int main(int argc, char* argv[])
 	setlocale(LC_ALL, "");
 
 	srand(time(nullptr));
-
-
+	
 	// InitCharacter
 	g_PC.STR = 17;
 	g_PC.AGL = 11;
@@ -32,17 +33,20 @@ int main(int argc, char* argv[])
 
 	g_PC.HPMax = 8;
 	g_PC.HP = 8;
-
-
-
+	g_PC.toHitMe = 10;
+	g_PC.m_AttackPower = 1;
+	
+		
+#ifdef _DEBUG
+	Script::g_ScriptDB.Load(L"script_test.txt");
+#else
 	Script::g_ScriptDB.Load(L"script.txt");
+#endif
+	InitMonsterDB_test();
+	
 
-	//Scene::RunScene1();
-	//Scene::RunScene2();
-	//Scene::RunScene3();
-	Scene::RunScene4();
-
-
+	Scene::RunScenes();
+	
 
 	system("pause");
 

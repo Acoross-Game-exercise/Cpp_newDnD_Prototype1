@@ -4,7 +4,7 @@
 #include <functional>
 
 #include "Util.h"
-#include "BattleCharacter.h"
+#include "CCreature.h"
 #include "MyCharacter.h"
 #include "Battle.h"
 #include "ScriptDB.h"
@@ -13,133 +13,98 @@ extern PlayerCharacter g_PC;
 
 namespace Scene
 {
-	class Goblin : public BattleCharacter
+	void __stdcall RunScenes()
 	{
-	public:
-		Goblin() : BattleCharacter(L"고블린") { ; }
-
-		virtual void DoAttack(CBattle* battle, BattleCharacter* pEnemy)
 		{
-			Script::RunFormattedScript(L"%s이 %s을 공격한다!\n", Name, pEnemy->Name);
+			Script::RunScript(1);
 			
-			OnMiss();
-		}
-
-		virtual void OnDamaged(int nDamage)
-		{
-			const wchar_t* strings[] =
 			{
-				//L"당신이 고블린을 치면 "
-				L"고블린은 소리를 지르며 통로를 따라 여둠 속으로 달아나 버린다. \n",
-				L"(고블린들은 어두운 곳에서도 볼 수 있다). ",
-
-				L"\0"
-			};
-
-			Script::RunScript(strings);
-
-			HP = 0;
-		}
-	};
-
-	bool __stdcall RunScene1()
-	{
-		Script::CScene* pScene = Script::g_ScriptDB.m_sceneMap[1];
-		Script::RunScript(pScene->m_Script, 100);
-		
-		Goblin goblin;
-		goblin.HP = 3;
-		goblin.toHit = 12;
-		
-		CBattle Battle;
-		Battle.RunBattle(&goblin);
-		
-		Script::Pause();
-
-		return RunScene2();
-	}
-	
-
-	class Snake : public BattleCharacter
-	{
-	public:
-		Snake() : BattleCharacter(L"뱀") { ; }
-
-		virtual void DoAttack(CBattle* battle, BattleCharacter* pEnemy)
-		{
-			Script::RunFormattedScript(L"%s이 %s을 공격한다!\n", Name, pEnemy->Name);
-
-			if (battle->m_nRound == 1)	// 첫 라운드에만 뱀의 공격이 명중한다.
-			{
-				OnHit();
-
-				g_PC.OnDamaged(1);
-
-				// 중독 되었는지 체크한다. -> 내성굴림
-				if (false == g_PC.CheckResistance(ResistanceType::RT_POISON))
-				{ 
-					Script::RunFormattedScript(L"중독되었다!\n");
-					g_PC.OnDamaged(2);
-				}
-				else
+				CBattle Battle;
+				Battle.m_nEnemyID = 1; //goblin 1
+				Battle.OnEnemyGotDamage = [](CBattle* battle)->bool
 				{
-					// 내성굴림 성공
-					Script::RunFormattedScript(L"중독되기 전에 뱀의 이빨에서 벗어날 수 있었다.\n");
-				}
+					return false;	// 한대라도 맞으면 battle end;
+				};
+				Battle.RunBattle();//&goblin);
 			}
-			else
+
+			Script::RunScript(7);
+
+			Script::Pause();
+		}
+
+		// 2 ///////////////////////////
+		{
+			Script::Pause();
+			system("cls");
+
+			Script::RunScript(2);
+
 			{
-				OnMiss();
+				CBattle Battle;
+				//Battle.m_pEnemy = &snake;
+				Battle.m_nEnemyID = 2;	// snake
+				Battle.OnRoundEnd = [](CBattle* battle)->bool
+				{
+					if (battle->m_pEnemy)
+					{
+						battle->m_pEnemy->toHitBonus = -20;	// 첫 라운드에만 때릴 수 있게
+					}
+
+					return true;
+				};
+				Battle.RunBattle();//&snake);
 			}
 		}
-	};
-	
-	bool __stdcall RunScene2()
-	{
-		Script::Pause();
-		system("cls");
 
-		Script::CScene* pScene = Script::g_ScriptDB.m_sceneMap[2];
-		Script::RunScript(pScene->m_Script, 100);
-
-		Snake snake;
-		snake.HP = 3;
-		snake.toHit = 11;
-		
-		CBattle Battle;
-		if (Battle.RunBattle(&snake))
+		// 3 //////////////////////////////////////
 		{
-			return RunScene3();
-		}
-		
-		return true;
-	}
+			Script::Pause();
 
-	bool __stdcall RunScene3()
-	{
-		Script::Pause();
-		system("cls");
-		
-		Script::CScene* pScene = Script::g_ScriptDB.m_sceneMap[3];
-		Script::RunScript(pScene->m_Script, 100);
-				
-		g_PC.OnHealed(g_PC.HPMax - g_PC.HP);
+			Script::RunScript(4);
 
-		{
-			const wchar_t* strings[] =
 			{
-				L"\1",
-				L"\n\n 일리나가 이런 저런 설명을 한다...\n",
-				L"\1",
+				CBattle Battle;
+				//Battle.m_pEnemy = &goblin;
+				Battle.m_nEnemyID = 3; //goblin 2
+				Battle.OnRoundEnd = [](CBattle* battle)->bool
+				{
+					if (battle->m_nRound == 1)	// 첫 라운드가 끝나면 다음을 출력한다.
+					{
+						Script::RunScript(8);
 
-				L"일리나와 동료가 되었다!\n",
-				L"\1",
-				L"\0"
-			};
+						// 첫 라운드가 끝나면 명중률 조정
+						battle->m_pEnemy->toHitBonus = -20;	// 안맞게
+					}
+					else if (battle->m_nRound == 2)	// 둘째 라운드가 끝나도록 고블린을 못 죽였다면 다음을 출력한다.
+					{
+						Script::RunScript(9);
 
-			Script::RunScript(strings);
+						battle->m_pEnemy->toHitBonus = 20;	// 필중
+					}
+					else if (battle->m_nRound == 3)
+					{
+						Script::RunScript(10);
+
+						battle->m_pEnemy->toHitBonus = -20;	// 안맞게
+					}
+
+					return true;
+				};
+				Battle.RunBattle();//&goblin);
+			}
+
+			Script::RunScript(11);
+
+			// 내성굴림 - 마법
+			if (false == g_PC.CheckResistance(RT_MAGIC))	// 실패
+			{
+				Script::RunScript(5);	// 끝 장면 #1
+			}
+			else //성공
+			{
+				Script::RunScript(6);	// 끝 장면 #2
+			}
 		}
-
-		return RunScene4();
 	}
 }

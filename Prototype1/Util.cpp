@@ -86,14 +86,16 @@ namespace Script
 
 namespace Dice
 {
-	int D20()
+	int D20(bool bPause)
 	{
 		// 주사위를 굴린다.
 		int d20 = rand() % 20 + 1;
-
-		Script::RunFormattedScript(L"\nd20: ");
-
-		Script::RunFormattedScript(L"%d!!\n", d20);
+		
+		if (bPause)
+		{
+			Script::RunFormattedScript(L"\nd20: ");
+			Script::RunFormattedScript(L"%d!!\n", d20);
+		}
 
 		return d20;
 	}
