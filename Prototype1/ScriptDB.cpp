@@ -5,6 +5,7 @@
 #include <fstream>
 #include <locale>
 #include <codecvt>
+#include <string>
 
 #include <functional>
 
@@ -57,7 +58,7 @@ namespace Script
 		return ret;
 	}
 
-	bool ScriptDB::Load(wchar_t* filename)
+	bool ScriptDB::Load(const wchar_t* const filename)
 	{
 		std::wifstream wis(filename, std::ifstream::binary);
 		if (wis.is_open())
@@ -68,13 +69,17 @@ namespace Script
 			int nLine = 0;	// 읽고 있는 줄
 			int nStart = -1;	// 마지막 읽은 @s x 의 위치
 			int nEnd = -1;	// 마지막 읽은 @send 의 위치
+			
+			std::wstring TStart = L"@s ";
+			std::wstring TEnd = L"@send";
 
 			CScene scene;
 			std::wstring wline;
 			while (std::getline(wis, wline))	// 한 줄 읽어들인다.
 			{
 				// @s 가 나타났다면 조건을 비교하여 처리
-				if (wcsncmp(wline.c_str(), L"@s ", 3) == 0)		// 시작 위치
+				//if (wcsncmp(wline.c_str(), L"@s ", 3) == 0)		// 시작 위치
+				if (wcsncmp(wline.c_str(), TStart.c_str(), TStart.length()) == 0)		// 시작 위치
 				{
 					// @s 를 찾고 있었으며 이전 end 보다 line 수가 커야한다.
 					if (nStart != -1 || nLine <= nEnd)
@@ -128,8 +133,7 @@ namespace Script
 					if (nStart != -1)
 					{
 						// remove '\r'
-						if (!wline.empty() && wline[wline.size() - 1] == '\r')
-							wline.erase(wline.size() - 1);
+						wline = Script::RemoveReturnChar(wline);
 
 						// replace "//n" -> '/n'
 						int idx = wline.find(L"\\n");

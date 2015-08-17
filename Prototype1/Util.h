@@ -4,6 +4,7 @@
 #include <Windows.h>
 
 #include "default.h"
+#include <string>
 
 namespace Console
 {
@@ -12,6 +13,8 @@ namespace Console
 
 namespace Script
 {
+	std::wstring RemoveReturnChar(std::wstring input);
+
 	void Pause();
 	void Pause(wchar_t const* const _Format, ...);
 	bool RunFormattedScript(wchar_t const* const _Format, ...);

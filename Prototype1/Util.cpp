@@ -13,6 +13,15 @@ namespace Console
 
 namespace Script
 {
+	std::wstring RemoveReturnChar(std::wstring wline)
+	{
+		// remove '\r'
+		if (!wline.empty() && wline[wline.size() - 1] == '\r')
+			wline.erase(wline.size() - 1);
+
+		return wline;
+	}
+
 	void Pause()
 	{
 		Pause(L"(...)");

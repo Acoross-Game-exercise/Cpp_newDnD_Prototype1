@@ -27,7 +27,7 @@ namespace Script
 	class ScriptDB
 	{
 	public:
-		bool Load(wchar_t* filename);
+		bool Load(const wchar_t* const filename);
 		SceneMap m_sceneMap;
 
 		virtual ~ScriptDB()
