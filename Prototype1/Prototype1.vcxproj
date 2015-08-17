@@ -147,11 +147,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BattleDB.cpp" />
     <ClCompile Include="BattleEventHandler.cpp" />
     <ClCompile Include="CCreature.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MonsterDB.cpp" />
     <ClCompile Include="MyCharacter.cpp" />
+    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneDB.cpp" />
+    <ClCompile Include="SceneFunctions.cpp" />
     <ClCompile Include="scenes.cpp" />
     <ClCompile Include="ScriptDB.cpp" />
     <ClCompile Include="SkillData.cpp" />
@@ -160,9 +164,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Battle.h" />
+    <ClInclude Include="BattleDB.h" />
     <ClInclude Include="BattleEventHandler.h" />
     <ClInclude Include="CCreature.h" />
     <ClInclude Include="default.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneDB.h" />
+    <ClInclude Include="SceneFunctions.h" />
     <ClInclude Include="MonsterDB.h" />
     <ClInclude Include="MyCharacter.h" />
     <ClInclude Include="scenes.h" />

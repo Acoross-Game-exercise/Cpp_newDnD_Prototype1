@@ -8,14 +8,19 @@
 #include "ScriptDB.h"
 #include "MonsterDB.h"
 #include "MyCharacter.h"
+#include "BattleDB.h"
+#include "SceneDB.h"
 //
 
 #include "scenes.h"
 
 extern PlayerCharacter g_PC;
 
-#include "Battle.h"
-#include "BattleEventHandler.h"
+// test
+#include "Scene.h"
+//#include "Battle.h"
+//#include "BattleEventHandler.h"
+//test
 
 int main(int argc, char* argv[])
 {
@@ -47,8 +52,16 @@ int main(int argc, char* argv[])
 	Script::g_ScriptDB.Load(L"script.txt");
 #endif
 	InitMonsterDB_test();
-	
-	Scene::RunScenes();
+	InitBattleDB_test();
+	Scene::InitSceneDB_test();
+
+	Scene::CScene* pScene = Scene::g_SceneDB.m_SceneMap[1];
+	if (pScene)
+	{
+		pScene->Run();
+	}
+
+	//Scene::RunScenes();
 	
 	system("pause");
 

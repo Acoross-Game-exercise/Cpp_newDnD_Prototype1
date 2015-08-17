@@ -7,6 +7,7 @@ class CCreature;
 class CBattle
 {
 public:
+	int m_nID;
 	int m_nRound;
 
 	int m_nEnemyID;

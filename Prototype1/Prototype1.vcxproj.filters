@@ -57,6 +57,18 @@
     <ClCompile Include="BattleEventHandler.cpp">
       <Filter>CppScripts</Filter>
     </ClCompile>
+    <ClCompile Include="SceneFunctions.cpp">
+      <Filter>CppScripts</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleDB.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneDB.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyCharacter.h">
@@ -88,6 +100,18 @@
     </ClInclude>
     <ClInclude Include="BattleEventHandler.h">
       <Filter>CppScripts</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneFunctions.h">
+      <Filter>CppScripts</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleDB.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneDB.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
