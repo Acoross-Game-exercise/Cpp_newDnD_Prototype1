@@ -22,7 +22,9 @@ public:
 
 	int HPMax;
 	int HP;
-	const wchar_t* Name;
+	//const wchar_t* Name;
+	std::wstring Name;
+	std::wstring NameInternal;
 
 // <능력치>
 	int STR;	//힘
@@ -48,11 +50,18 @@ public:
 	CSkill* m_pAttackSkill;
 // </임시>
 
+	CCreature() { ; }
+	
 	CCreature(const wchar_t* name) : m_nID(0), HPMax(1), HP(1), Name(name), 
 		STR(0), AGL(0), INT(0), CON(0), WIS(0), CHA(0),
 		toHitMe(0), toHitBonus(0), m_AttackPower(1), m_pAttackSkill(nullptr)
 	{
 		memset(nRegistance, 0, sizeof(int) * RT_MAX);
+	}
+
+	void Print()
+	{
+		wprintf_s(L"\nId(%d), Name(%s, %s), HP(%d), toHitMe(%d), toHitBonus(%d), Attack(%d)\n", m_nID, Name.c_str(), NameInternal.c_str(), HP, toHitMe, toHitBonus, m_AttackPower);
 	}
 
 	virtual ~CCreature();

@@ -153,6 +153,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MonsterDB.cpp" />
     <ClCompile Include="MyCharacter.cpp" />
+    <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneDB.cpp" />
     <ClCompile Include="SceneFunctions.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="BattleEventHandler.h" />
     <ClInclude Include="CCreature.h" />
     <ClInclude Include="default.h" />
+    <ClInclude Include="Parser.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneDB.h" />
     <ClInclude Include="SceneFunctions.h" />

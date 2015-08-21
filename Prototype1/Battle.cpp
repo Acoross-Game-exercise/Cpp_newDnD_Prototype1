@@ -28,7 +28,7 @@ bool CBattle::RunBattle()
 	{
 		// 적, 아군 상태 표시
 		wprintf(L"\n===================================\n");
-		wprintf(L"나\t%s\n", pEnemy->Name);
+		wprintf(L"나\t%s\n", pEnemy->Name.c_str());
 		wprintf(L"HP: %d\tHP: %d\n", g_PC.HP, pEnemy->HP);
 		wprintf(L"===================================\n");
 	};
@@ -41,7 +41,7 @@ bool CBattle::RunBattle()
 
 		// 전투 소개 문구
 		system("cls");
-		Script::RunFormattedScript(L"%s과의 전투!!!: Round %d\n", pEnemy->Name, m_nRound);
+		Script::RunFormattedScript(L"%s과의 전투!!!: Round %d\n", pEnemy->Name.c_str(), m_nRound);
 
 		printBattleState();
 
@@ -78,7 +78,7 @@ bool CBattle::RunBattle()
 
 		if (pEnemy->HP <= 0)
 		{
-			Script::RunFormattedScript(L"당신은 %s에게 승리했다..\n", pEnemy->Name);
+			Script::RunFormattedScript(L"당신은 %s에게 승리했다..\n", pEnemy->Name.c_str());
 			bRet = true;
 			break;
 		}

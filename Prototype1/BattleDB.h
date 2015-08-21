@@ -11,6 +11,8 @@ class BattleDB
 {
 public:
 	BattleMap m_BattleMap;
+	
+	bool Load(const wchar_t* const filename);
 
 	BattleDB();
 	~BattleDB();

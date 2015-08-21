@@ -10,7 +10,7 @@ CCreature::~CCreature()
 
 bool CCreature::DoAttack(CBattle* pBattle, CCreature* pEnemy)
 {
-	Script::RunFormattedScript(L"%s이 %s을 공격한다!\n", Name, pEnemy->Name);
+	Script::RunFormattedScript(L"%s이 %s을 공격한다!\n", Name.c_str(), pEnemy->Name.c_str());
 
 	if (m_pAttackSkill)
 	{
@@ -29,7 +29,7 @@ void CCreature::OnHealed(int nHealed)
 {
 	HP += nHealed;
 
-	Script::RunFormattedScript(L"%s의 생명력이 %d 회복되었다!!\n", Name, nHealed);
+	Script::RunFormattedScript(L"%s의 생명력이 %d 회복되었다!!\n", Name.c_str(), nHealed);
 }
 
 void CCreature::OnDamaged(int nDamage)	// 내가 맞음
@@ -41,18 +41,18 @@ void CCreature::OnDamaged(int nDamage)	// 내가 맞음
 	if (HP <= 0)
 	{
 		Script::Pause();
-		Script::RunFormattedScript(L"%s은 죽었다.\n", Name);
+		Script::RunFormattedScript(L"%s은 죽었다.\n", Name.c_str());
 	}
 }
 
 void CCreature::OnHitMessage()	// 내가 때림
 {
-	Script::RunFormattedScript(L"%s의 공격이 명중했다!!\n", Name);
+	Script::RunFormattedScript(L"%s의 공격이 명중했다!!\n", Name.c_str());
 }
 
 void CCreature::OnMissMessage()	// 내 공격이 빗나감
 {
-	Script::RunFormattedScript(L"그러나 %s의 공격은 빗나갔다.\n", Name);
+	Script::RunFormattedScript(L"그러나 %s의 공격은 빗나갔다.\n", Name.c_str());
 }
 
 

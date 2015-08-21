@@ -30,6 +30,11 @@ public:
 		;
 	}
 
+	void Print()
+	{
+		wprintf_s(L"\nid(%d), enemyid(%d)\n", m_nID, m_nEnemyID);
+	}
+
 	bool RunBattle();//CCreature* pEnemy);
 
 	static bool DefaultHandler(CBattle* battle)
