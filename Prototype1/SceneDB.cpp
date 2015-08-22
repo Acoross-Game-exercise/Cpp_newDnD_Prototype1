@@ -3,6 +3,8 @@
 #include "Scene.h"
 #include "SceneFunctions.h"
 
+#include "Parser.h"
+
 namespace Scene
 {
 	SceneDB g_SceneDB;
@@ -13,6 +15,23 @@ namespace Scene
 
 	SceneDB::~SceneDB()
 	{
+	}
+
+	bool SceneDB::Load(const wchar_t* const filename)
+	{
+		using namespace Parser;
+
+		CParser<CScene>::funcList fList =
+		{
+			[](CScene& scene, Token& token)
+		{
+			scene.m_nID = ParseInt(token);
+		}
+		};
+
+		CParser<CScene> parser;
+
+		return parser.Load(filename, fList, m_SceneMap);
 	}
 
 	void InitSceneDB_test()

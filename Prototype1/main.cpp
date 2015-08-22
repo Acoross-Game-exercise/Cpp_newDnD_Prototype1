@@ -47,7 +47,8 @@ int main(int argc, char* argv[])
 	}
 		
 #ifdef _DEBUG
-	Script::g_ScriptDB.Load(L"script_test.txt");
+	//Script::g_ScriptDB.Load(L"script_test.txt");
+	Script::g_ScriptDB.Load2(L"script_test.txt");
 #else
 	Script::g_ScriptDB.Load(L"script.txt");
 #endif

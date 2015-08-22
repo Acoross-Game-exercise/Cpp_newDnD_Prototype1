@@ -17,6 +17,15 @@ namespace Script
 	public:
 		int m_nID;
 		ScriptData m_Script;
+
+		// SetData from data, and clear data.
+		void SetData(CScene& data)
+		{
+			m_nID = data.m_nID;
+			data.m_nID = 0;
+
+			m_Script.swap(data.m_Script);
+		}
 	};
 	// Scene end /////////////////
 	
@@ -28,6 +37,8 @@ namespace Script
 	{
 	public:
 		bool Load(const wchar_t* const filename);
+		bool Load2(const wchar_t* const filename);
+
 		SceneMap m_sceneMap;
 
 		virtual ~ScriptDB()

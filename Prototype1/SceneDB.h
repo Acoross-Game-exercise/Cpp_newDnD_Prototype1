@@ -12,6 +12,9 @@ namespace Scene
 	{
 	public:
 		std::unordered_map<int, Scene::CScene*> m_SceneMap;
+
+		bool Load(const wchar_t* const filename);
+
 		SceneDB();
 		virtual ~SceneDB();
 	};

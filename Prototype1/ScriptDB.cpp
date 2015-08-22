@@ -10,6 +10,7 @@
 #include <functional>
 
 #include "Util.h"
+#include "Parser.h"
 
 namespace Script
 {
@@ -58,6 +59,33 @@ namespace Script
 		return ret;
 	}
 
+	bool ScriptDB::Load2(const wchar_t* const filename)
+	{
+		using namespace Parser;
+
+		CMultilineParser<CScene> parser;
+		
+		CMultilineParser<CScene>::ParserFunc f = [](CScene& data, std::wstring wline)
+		{
+			// remove '\r'
+			wline = Script::RemoveReturnChar(wline);
+
+			// replace "//n" -> '/n'
+			int idx = wline.find(L"\\n");
+			while (idx != std::wstring::npos)
+			{
+				wline.replace(idx, 2, L"\n");
+				idx = wline.find(L"\\n");
+			}
+
+			data.m_Script.push_back(wline);
+		};
+
+		return parser.Load(filename, m_sceneMap, f);
+	}
+
+	// Script 파일을 읽어들인다.
+	// 시작, 끝 위치가 있고, 그 사이의 row 는 모두 해당 object 에 포함된다.
 	bool ScriptDB::Load(const wchar_t* const filename)
 	{
 		std::wifstream wis(filename, std::ifstream::binary);
@@ -78,7 +106,6 @@ namespace Script
 			while (std::getline(wis, wline))	// 한 줄 읽어들인다.
 			{
 				// @s 가 나타났다면 조건을 비교하여 처리
-				//if (wcsncmp(wline.c_str(), L"@s ", 3) == 0)		// 시작 위치
 				if (wcsncmp(wline.c_str(), TStart.c_str(), TStart.length()) == 0)		// 시작 위치
 				{
 					// @s 를 찾고 있었으며 이전 end 보다 line 수가 커야한다.
@@ -96,9 +123,7 @@ namespace Script
 					}
 
 					nStart = nLine;
-					scene.m_nID = std::wcstol(&wline[idx + 3], nullptr, 10);
-					//scene.m_Script.push_back(wline);
-					
+					scene.m_nID = std::wcstol(&wline[idx + TStart.length()], nullptr, 10);
 				}
 				else if (wcsncmp(wline.c_str(), L"@send", 5) == 0)
 				{
