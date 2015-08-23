@@ -10,11 +10,17 @@ extern PlayerCharacter g_PC;
 
 namespace Scene
 {
+	bool DefaultFunc()
+	{
+		wprintf_s(L"Scene::DefaultFunc\n");
+		return true;
+	}
+
 	bool RunSceneFunc(const SceneFunc& F)
 	{
 		return F();
 	}
-
+	
 	SceneFunc Func_RunBattle(CBattle& battle)
 	{
 		return [&battle]()->bool

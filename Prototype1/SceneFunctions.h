@@ -8,6 +8,8 @@
 
 namespace Scene
 {
+	bool DefaultFunc();
+
 	bool RunSceneFunc(const SceneFunc& F);
 
 	SceneFunc Func_RunBattle(CBattle& battle);

@@ -54,9 +54,14 @@ int main(int argc, char* argv[])
 #endif
 	if (!g_monsterDB.Load(L"monster.csv")) return 0;
 	if (!g_BattleDB.Load(L"battledata.csv")) return 0;
-
 	//InitBattleDB_test();
-	Scene::InitSceneDB_test();
+	
+#ifdef _DEBUG
+	if (!Scene::g_SceneDB.Load(L"scene_test.txt")) return 0;
+#else
+	if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
+#endif
+//	Scene::InitSceneDB_test();
 	
 	Scene::CScene* pScene = Scene::g_SceneDB.m_SceneMap[1];
 	if (pScene)

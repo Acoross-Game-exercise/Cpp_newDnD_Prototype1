@@ -12,7 +12,7 @@ namespace Parser
 		int nPos = 0;
 		while (true)
 		{
-			if (input[nPos] == L' ' || input[nPos] == L'\t')
+			if (input[nPos] == L' ' || input[nPos] == L'\t' || input[nPos] == L'\n')	// 공백
 			{
 				++nPos;
 			}
@@ -26,15 +26,12 @@ namespace Parser
 		const wchar_t* next = nullptr;
 		while (true)
 		{
-			if (input[nPos] == L'\0')
+			if (input[nPos] == L'\0' || input[nPos] == L'/')	// 문장 종료 구분자
 			{
 				break;
 			}
-			if (input[nPos] == L'/')
-			{
-				break;
-			}
-			else if (input[nPos] == L',')
+
+			if (input[nPos] == L',')	// 구분자
 			{
 				next = &input[nPos + 1];
 				break;

@@ -95,7 +95,7 @@ namespace Parser
 					auto ret = targetMap.insert(TargetMap::value_type(pData->m_nID, pData));
 					if (ret.second == false)
 					{
-						printf("\nparser insert failed, file(%s), line(%d)\n", filename, nScriptLine);
+						wprintf_s(L"\nparser insert failed, file(%s), line(%d)\n", filename, nScriptLine);
 						delete pData;
 						return false;
 					}
@@ -110,8 +110,6 @@ namespace Parser
 	class CMultilineParser
 	{
 	public:
-		//typedef std::function<void(T&, Token&)> ParserFunc;
-		//typedef std::list<ParserFunc> funcList;
 		typedef std::function<void(T&, std::wstring)> ParserFunc;
 		typedef std::unordered_map<int, T*> TargetMap;
 
@@ -188,19 +186,6 @@ namespace Parser
 						if (nStart != -1)
 						{
 							funcParseAndAddData(data, wline);
-							
-							//// remove '\r'
-							//wline = Script::RemoveReturnChar(wline);
-
-							//// replace "//n" -> '/n'
-							//int idx = wline.find(L"\\n");
-							//while (idx != std::wstring::npos)
-							//{
-							//	wline.replace(idx, 2, L"\n");
-							//	idx = wline.find(L"\\n");
-							//}
-
-							//data.m_Script.push_back(wline);
 						}
 					}
 
