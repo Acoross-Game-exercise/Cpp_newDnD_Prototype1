@@ -71,7 +71,7 @@ namespace Script
 			wline = Script::RemoveReturnChar(wline);
 
 			// replace "//n" -> '/n'
-			int idx = wline.find(L"\\n");
+			size_t idx = wline.find(L"\\n");
 			while (idx != std::wstring::npos)
 			{
 				wline.replace(idx, 2, L"\n");
@@ -115,7 +115,7 @@ namespace Script
 						return false;
 					}
 
-					int idx = wline.find(L"@s ");
+					size_t idx = wline.find(L"@s ");
 					if (idx == std::wstring::npos)
 					{
 						printf("@s x: couldn't parse index, last @s[%d], last @send[%d], now[%d]\n", nStart, nEnd, nLine);
@@ -161,7 +161,7 @@ namespace Script
 						wline = Script::RemoveReturnChar(wline);
 
 						// replace "//n" -> '/n'
-						int idx = wline.find(L"\\n");
+						size_t idx = wline.find(L"\\n");
 						while (idx != std::wstring::npos)
 						{
 							wline.replace(idx, 2, L"\n");

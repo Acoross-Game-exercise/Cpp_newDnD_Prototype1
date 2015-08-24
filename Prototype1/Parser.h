@@ -145,7 +145,7 @@ namespace Parser
 							return false;
 						}
 
-						int idx = wline.find(L"@s ");
+						size_t idx = wline.find(L"@s ");
 						if (idx == std::wstring::npos)
 						{
 							printf("@s x: couldn't parse index, last @s[%d], last @send[%d], now[%d]\n", nStart, nEnd, nLine);

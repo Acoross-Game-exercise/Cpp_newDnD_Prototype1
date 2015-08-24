@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 {
 	setlocale(LC_ALL, "");
 
-	srand(time(nullptr));
+	srand(static_cast<unsigned int>(time(nullptr)));
 	
 	// InitCharacter
 	{
@@ -57,7 +57,7 @@ int main(int argc, char* argv[])
 	//InitBattleDB_test();
 	
 #ifdef _DEBUG
-	if (!Scene::g_SceneDB.Load(L"scene_test.txt")) return 0;
+	if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
 #else
 	if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
 #endif

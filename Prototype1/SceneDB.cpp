@@ -17,7 +17,7 @@ namespace Scene
 		const wchar_t* nextInput;
 	};
 
-	bool find(std::list<wchar_t>& lst, wchar_t data)
+	bool find(std::vector<wchar_t>& lst, wchar_t data)
 	{
 		for (auto it = lst.begin(); it != lst.end(); ++it)
 		{
@@ -32,9 +32,16 @@ namespace Scene
 	class CLineTokenizer	// 왼쪽에서부터 순서대로 진행하여, 구분자 또는 terminal 까지를 token 으로 얻어낸다.
 	{
 	public:
-		std::list<wchar_t> m_Space;
-		std::list<wchar_t> m_Terminal;
-		std::list<wchar_t> m_Seperator;
+		std::vector<wchar_t> m_Space;
+		std::vector<wchar_t> m_Terminal;
+		std::vector<wchar_t> m_Seperator;
+
+		template<std::size_t N1, std::size_t N2, std::size_t N3>
+		CLineTokenizer(const wchar_t(&space)[N1], const wchar_t (&terminal)[N2], const wchar_t (&seperator)[N3])
+			: m_Space(&space[0], &space[N1 - 1]), m_Terminal(&terminal[0], &terminal[N2 - 1]), m_Seperator(&seperator[0], &seperator[N3 - 1])
+		{
+			;
+		}
 
 		Token2 GetToken(const wchar_t* const input)
 		{
@@ -76,9 +83,15 @@ namespace Scene
 	public:
 		wchar_t m_StartChar;
 		wchar_t m_EndChar;
-		std::list<wchar_t> m_Space;
-		std::list<wchar_t> m_Terminal;
-		std::list<wchar_t> m_Seperator;
+		std::vector<wchar_t> m_Space;
+		std::vector<wchar_t> m_Terminal;
+		std::vector<wchar_t> m_Seperator;
+
+		template<std::size_t N1, std::size_t N2, std::size_t N3>
+		CLRTokenizer(const wchar_t(&space)[N1], const wchar_t(&terminal)[N2], const wchar_t(&seperator)[N3])
+			: m_Space(&space[0], &space[N1-1]), m_Terminal(&terminal[0], &terminal[N2 - 1]), m_Seperator(&seperator[0], &seperator[N3 - 1])
+		{
+		}
 
 		Token2 GetToken(const wchar_t* const input)
 		{
@@ -134,30 +147,30 @@ namespace Scene
 		}
 	};
 
-	typedef void(*ParserFunc)(const std::wstring&);
-	
-	int ParseInt(const wchar_t* input)
+	int ParseInt(const wchar_t* const wline)
 	{
-		return std::wcstol(input, nullptr, 10);
+		return std::wcstol(wline, nullptr, 10);
 	}
-	
+
 	Scene::SceneFunc ParseFunction(const wchar_t* const input);
 
+	typedef Scene::SceneFunc(*ParserFunc)(const std::wstring&);
+	
 	Scene::SceneFunc Parser_RunScript(const std::wstring& input)
 	{
 		int nArg = ParseInt(input.c_str());
 		return Scene::Func_RunScript(nArg);
 	}
 
+	Scene::SceneFunc Parser_RunBattle(const std::wstring& input)
+	{
+		int nArg = ParseInt(input.c_str());
+		return Scene::Func_RunBattle(nArg);
+	}
+
 	Scene::SceneFunc Parser_CondCheckResist(const std::wstring& input)
 	{
-		CLineTokenizer lt;
-		lt.m_Space.push_back(L' ');
-		lt.m_Space.push_back(L'\t');
-		lt.m_Space.push_back(L',');
-		lt.m_Terminal.push_back(L'\0');
-		lt.m_Terminal.push_back(L'/');	// 주석		
-		lt.m_Seperator.push_back(L',');
+		CLineTokenizer lt(L" \t,", L"\0/", L",");
 
 		Token2 arg1 = lt.GetToken(input.c_str());
 		Token2 arg2 = lt.GetToken(arg1.nextInput);
@@ -170,20 +183,26 @@ namespace Scene
 		return Scene::Cond_CheckPCResistance(ResistanceType(nArg1), fArg2, fArg3);
 	}
 
+////
+	typedef std::unordered_map<std::wstring, ParserFunc> ParserFuncMap;
+
+	ParserFuncMap g_ParserFuncMap;
+
+	void InitParserFuncMap()
+	{
+		g_ParserFuncMap.clear();
+
+		g_ParserFuncMap[L"runscript"] = Parser_RunScript;
+		g_ParserFuncMap[L"runbattle"] = Parser_RunBattle;
+		g_ParserFuncMap[L"cond_check_pc_resistance"] = Parser_CondCheckResist;
+	}
+////
+
 	Scene::SceneFunc ParseFunction(const wchar_t* const input)
 	{
-		CLineTokenizer lt;
-		lt.m_Space.push_back(L' ');
-		lt.m_Space.push_back(L'\t');
-		lt.m_Terminal.push_back(L'\0');
-		lt.m_Terminal.push_back(L'/');	// 주석		
-		lt.m_Seperator.push_back(L'(');
+		CLineTokenizer lt(L" \t", L"\0/", L"(");
 
-		CLRTokenizer lrt;
-		lrt.m_Space.push_back(L' ');
-		lrt.m_Space.push_back(L'\t');
-		lrt.m_Terminal.push_back(L'\0');
-		lrt.m_Terminal.push_back(L'/');	// 주석
+		CLRTokenizer lrt(L" \t", L"\0/", L"");
 		lrt.m_StartChar = L'(';
 		lrt.m_EndChar = L')';
 
@@ -192,13 +211,10 @@ namespace Scene
 
 		int a = 1;
 
-		if (nameToken.wcsToken[0] == L'A')
+		auto it = g_ParserFuncMap.find(nameToken.wcsToken);
+		if (it != g_ParserFuncMap.end())
 		{
-			return Parser_RunScript(args.wcsToken);
-		}
-		else if (nameToken.wcsToken[0] == L'B')
-		{
-			return Parser_CondCheckResist(args.wcsToken);
+			return (it->second)(args.wcsToken);
 		}
 		else
 		{
@@ -206,6 +222,8 @@ namespace Scene
 			return SceneFunc(DefaultFunc);
 		}
 	}
+
+
 
 	SceneDB g_SceneDB;
 
@@ -219,15 +237,14 @@ namespace Scene
 
 	bool SceneDB::Load(const wchar_t* const filename)
 	{
-		ParseFunction(L"A(1)");
-		ParseFunction(L"B(1, A(1), A(2))");
+		InitParserFuncMap();
 
 		using namespace Parser;
 
 		CMultilineParser<CScene>::ParserFunc func = [](CScene& scene, std::wstring wline)
 		{
 			wprintf_s(L"%s\n", wline.c_str());
-			//scene.m_SceneFuncList.push_back(ParseSceneScriptLine(wline));
+			scene.m_SceneFuncList.push_back(ParseFunction(wline.c_str()));
 		};
 
 		CMultilineParser<CScene> parser;
