@@ -18,8 +18,6 @@ extern PlayerCharacter g_PC;
 
 // test
 #include "Scene.h"
-//#include "Battle.h"
-//#include "BattleEventHandler.h"
 //test
 
 int main(int argc, char* argv[])
@@ -56,11 +54,7 @@ int main(int argc, char* argv[])
 	if (!g_BattleDB.Load(L"battledata.csv")) return 0;
 	//InitBattleDB_test();
 	
-#ifdef _DEBUG
 	if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
-#else
-	if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
-#endif
 //	Scene::InitSceneDB_test();
 	
 	Scene::CScene* pScene = Scene::g_SceneDB.m_SceneMap[1];
