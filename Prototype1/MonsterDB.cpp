@@ -9,7 +9,19 @@
 
 #include "Parser.h"
 
+#include "../RecurrentDescentParser/Scanner/Scanner.h"
+
 MonsterDB g_monsterDB;
+
+bool MonsterDB::Load2(const wchar_t* const filename)
+{
+	using namespace AcorossScanner;
+
+	FuncScanner fScan;
+
+
+	return true;
+}
 
 bool MonsterDB::Load(const wchar_t* const filename)
 {
