@@ -16,6 +16,9 @@
     <Filter Include="Scanner">
       <UniqueIdentifier>{621775d4-23fd-46aa-afb1-a9ceb97cf9b7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Parser">
+      <UniqueIdentifier>{52714246-da3c-4a94-a271-d07336058a40}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,10 +27,27 @@
     <ClCompile Include="Scanner\Scanner.cpp">
       <Filter>Scanner</Filter>
     </ClCompile>
+    <ClCompile Include="parser\ParserBase.cpp">
+      <Filter>Parser</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scanner\Scanner.h">
       <Filter>Scanner</Filter>
     </ClInclude>
+    <ClInclude Include="Parser\ParserBase.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+    <ClInclude Include="default.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Parser\RDParser.h">
+      <Filter>Parser</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Scanner\ScannerImplMacro.inc">
+      <Filter>Scanner</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -20,6 +20,10 @@ extern PlayerCharacter g_PC;
 #include "Scene.h"
 //test
 
+// other project include test
+#include "../RecurrentDescentParser/Parser/RDParser.h"
+//
+
 int main(int argc, char* argv[])
 {
 	setlocale(LC_ALL, "");
@@ -44,6 +48,9 @@ int main(int argc, char* argv[])
 		g_PC.m_AttackPower = 1;
 	}
 	
+	//TestParser parser;
+	//parser.RunTestProgram();
+
 	if (!g_monsterDB.Load2(L"monster.csv")) return 0;
 //
 //#ifdef _DEBUG

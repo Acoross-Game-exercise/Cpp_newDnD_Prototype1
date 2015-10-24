@@ -1,9 +1,14 @@
+#ifdef _RD_TEST_
+
 #include <iostream>
 #include <iterator>
 #include <string>
 #include <regex>
 
-#include "Scanner\Scanner.h"
+#include "Scanner/Scanner.h"
+#include "Parser/ParserBase.h"
+
+#include "Parser\RDParser.h"
 
 using namespace AcorossScanner;
 
@@ -29,10 +34,9 @@ void RegexSample()
 	}
 }
 
-#ifdef _RDPARSER_MAIN_
 int main()
 {
-	wchar_t* input = L" dfdg 12322 12dd id3d ,83k(dfd dddd)";
+	/*wchar_t* input = L" dfdg 12322 12dd id3d ,83k(dfd dddd)";
 	std::wstring buf = input;
 
 	std::wcout << L"input: " << input << std::endl;
@@ -48,7 +52,18 @@ int main()
 		ret = scanner.Scan(input);
 		std::wcout << "ret - " << FuncScanner::Token::TokenToName(ret.type) << L":" << ret.data << std::endl << std::endl;
 	}
+*/
+	
+	/*CFunctionParser p;
+	p.Run();*/
+
+	CRDParser parser;
+	parser.RunTestProgram();
+
+	////////////////////////
+	//AcorossParser::Parser parser;
+	//parser.Load(L"monster.csv");
 
 	system("pause");
 }
-#endif
+#endif // _RD_TEST_
