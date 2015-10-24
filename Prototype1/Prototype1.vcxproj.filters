@@ -72,6 +72,12 @@
     <ClCompile Include="Parser.cpp">
       <Filter>DB</Filter>
     </ClCompile>
+    <ClCompile Include="MonsterParser.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleParser.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="MyCharacter.h">
@@ -120,6 +126,9 @@
       <Filter>DB</Filter>
     </ClInclude>
     <ClInclude Include="MonsterParser.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleParser.h">
       <Filter>DB</Filter>
     </ClInclude>
   </ItemGroup>

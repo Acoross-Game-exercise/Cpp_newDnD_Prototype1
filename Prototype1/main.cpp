@@ -14,15 +14,14 @@
 
 #include "scenes.h"
 
+#include "Battle.h"
+
 extern PlayerCharacter g_PC;
 
 // test
 #include "Scene.h"
 //test
 
-// other project include test
-#include "../RecurrentDescentParser/Parser/RDParser.h"
-//
 
 int main(int argc, char* argv[])
 {
@@ -48,29 +47,31 @@ int main(int argc, char* argv[])
 		g_PC.m_AttackPower = 1;
 	}
 	
-	//TestParser parser;
-	//parser.RunTestProgram();
+#ifdef _DEBUG
+	//Script::g_ScriptDB.Load(L"script_test.txt");
+	Script::g_ScriptDB.Load2(L"script_test.txt");
+#else
+	Script::g_ScriptDB.Load(L"script.txt");
+#endif
+	
+	if (!g_monsterDB.Load(L"monster.csv")) return 0;
 
-	if (!g_monsterDB.Load2(L"monster.csv")) return 0;
-//
-//#ifdef _DEBUG
-//	//Script::g_ScriptDB.Load(L"script_test.txt");
-//	Script::g_ScriptDB.Load2(L"script_test.txt");
-//#else
-//	Script::g_ScriptDB.Load(L"script.txt");
-//#endif
-//	if (!g_monsterDB.Load(L"monster.csv")) return 0;
-//	if (!g_BattleDB.Load(L"battledata.csv")) return 0;
-//	//InitBattleDB_test();
-//	
-//	if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
-////	Scene::InitSceneDB_test();
-//	
-//	Scene::CScene* pScene = Scene::g_SceneDB.m_SceneMap[1];
-//	if (pScene)
-//	{
-//		pScene->Run();
-//	}
+	{
+		if (!g_BattleDB.Load(L"battledata.csv")) return 0;
+		/*g_BattleDB.m_BattleMap[1]->RunBattle();
+		g_BattleDB.m_BattleMap[2]->RunBattle();
+		g_BattleDB.m_BattleMap[3]->RunBattle();*/
+	}
+
+	{
+		if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
+	}
+	
+	Scene::CScene* pScene = Scene::g_SceneDB.m_SceneMap[1];
+	if (pScene)
+	{
+		pScene->Run();
+	}
 
 	//Scene::RunScenes();
 	

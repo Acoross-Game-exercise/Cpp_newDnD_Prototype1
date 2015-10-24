@@ -164,9 +164,11 @@
   <ItemGroup>
     <ClCompile Include="BattleDB.cpp" />
     <ClCompile Include="BattleEventHandler.cpp" />
+    <ClCompile Include="BattleParser.cpp" />
     <ClCompile Include="CCreature.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MonsterDB.cpp" />
+    <ClCompile Include="MonsterParser.cpp" />
     <ClCompile Include="MyCharacter.cpp" />
     <ClCompile Include="Parser.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -182,6 +184,7 @@
     <ClInclude Include="Battle.h" />
     <ClInclude Include="BattleDB.h" />
     <ClInclude Include="BattleEventHandler.h" />
+    <ClInclude Include="BattleParser.h" />
     <ClInclude Include="CCreature.h" />
     <ClInclude Include="default.h" />
     <ClInclude Include="MonsterParser.h" />

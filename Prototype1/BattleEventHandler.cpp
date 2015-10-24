@@ -66,18 +66,18 @@ namespace BattleEventHandler
 			return false;
 		};
 	}
+}
 
-	CBattle::OnBattleEvent operator+(const CBattle::OnBattleEvent& lhs, const CBattle::OnBattleEvent& rhs)
+CBattle::OnBattleEvent operator+(const CBattle::OnBattleEvent& lhs, const CBattle::OnBattleEvent& rhs)
+{
+	return [lhs, rhs](CBattle* battle)->bool
 	{
-		return [lhs, rhs](CBattle* battle)->bool
+		if (battle)
 		{
-			if (battle)
-			{
-				if (lhs(battle))
-					return rhs(battle);
-			}
+			if (lhs(battle))
+				return rhs(battle);
+		}
 
-			return false;
-		};
-	}
+		return false;
+	};
 }

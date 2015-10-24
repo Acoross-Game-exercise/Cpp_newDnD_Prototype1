@@ -14,11 +14,11 @@
 
 MonsterDB g_monsterDB;
 
-bool MonsterDB::Load2(const wchar_t* const filename)
+bool MonsterDB::Load(const wchar_t* const filename)
 {
 	setlocale(LC_ALL, "");
 
-	std::wifstream wis(L"monster.csv", std::ifstream::binary);
+	std::wifstream wis(filename, std::ifstream::binary);
 	if (false == wis.is_open())
 		return false;
 
@@ -37,55 +37,11 @@ bool MonsterDB::Load2(const wchar_t* const filename)
 	{
 		memset(buf, 0, sizeof(buf));
 		wline._Copy_s(buf, 2000, wline.size(), 0);
-		//wchar_t* input = buf;
 
 		ret = parser.Parse(buf);
-		
-		std::cout << "ret=" << ret << std::endl;
 	}
 
 	return true;
-}
-
-bool MonsterDB::Load(const wchar_t* const filename)
-{
-	using namespace Parser;	
-	
-	CParser<CCreature>::funcList fList = 
-	{
-		[](CCreature& creature, Token& token)
-		{
-			creature.m_nID = ParseInt(token);
-		},
-			[](CCreature& creature, Token& token)
-		{
-			creature.NameInternal = ParseStr(token);
-		},
-			[](CCreature& creature, Token& token)
-		{
-			creature.Name = ParseStr(token);
-		},
-			[](CCreature& creature, Token& token)
-		{
-			creature.HP = ParseInt(token);
-		},
-			[](CCreature& creature, Token& token)
-		{
-			creature.toHitMe = ParseInt(token);
-		},
-			[](CCreature& creature, Token& token)
-		{
-			creature.toHitBonus = ParseInt(token);
-		},
-			[](CCreature& creature, Token& token)
-		{
-			creature.m_AttackPower = ParseInt(token);
-		}
-	};
-
-	CParser<CCreature> parser;
-
-	return parser.Load(filename, fList, m_CreatureMap);
 }
 
 void InitMonsterDB_test()

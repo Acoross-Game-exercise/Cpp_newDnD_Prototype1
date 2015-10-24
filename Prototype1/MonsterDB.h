@@ -11,7 +11,6 @@ typedef std::unordered_map<int, CCreature*> CreatureMap;
 class MonsterDB
 {
 public:
-	bool Load2(const wchar_t* const filename);
 	bool Load(const wchar_t* const filename);
 	CreatureMap m_CreatureMap;
 

@@ -2,6 +2,7 @@
 #define _BATTLE_CHARACTER_
 
 #include <list>
+#include <memory>
 
 #include "SkillData.h"
 
@@ -18,25 +19,25 @@ class CSkill;
 class CCreature
 {
 public:
-	int m_nID;
+	int m_nID{ 0 };
 
-	int HPMax;
-	int HP;
-	//const wchar_t* Name;
-	std::wstring Name;
-	std::wstring NameInternal;
+	int HPMax{ 1 };
+	int HP{ 1 };
+
+	std::wstring Name{ L"" };
+	std::wstring NameInternal{ L"" };
 
 // <능력치>
-	int STR;	//힘
-	int AGL;	//민첩성
-	int INT;	//지능
-	int CON;	//건강
-	int WIS;	//지혜
-	int CHA;	//매력
+	int STR{ 0 };	//힘
+	int AGL{ 0 };	//민첩성
+	int INT{ 0 };	//지능
+	int CON{ 0 };	//건강
+	int WIS{ 0 };	//지혜
+	int CHA{ 0 };	//매력
 // </능력치>
 
 // <내성치>
-	int nRegistance[RT_MAX];
+	int nRegistance[RT_MAX]{ 0, };
 	const wchar_t* const strRegistance[RT_MAX] = {
 		L"독",
 		L"마법"
@@ -44,19 +45,16 @@ public:
 // </내성치>
 
 // <임시>
-	int toHitMe;
-	int toHitBonus;
-	int m_AttackPower;
-	CSkill* m_pAttackSkill;
+	int toHitMe{ 0 };
+	int toHitBonus{ 0 };
+	int m_AttackPower{ 1 };
+	//CSkill* m_pAttackSkill{ nullptr };
+	std::unique_ptr<CSkill> m_pAttackSkill{ nullptr };
 // </임시>
 
 	CCreature() { ; }
-	
-	CCreature(const wchar_t* name) : m_nID(0), HPMax(1), HP(1), Name(name), 
-		STR(0), AGL(0), INT(0), CON(0), WIS(0), CHA(0),
-		toHitMe(0), toHitBonus(0), m_AttackPower(1), m_pAttackSkill(nullptr)
+	CCreature(const wchar_t* name) : Name(name)
 	{
-		memset(nRegistance, 0, sizeof(int) * RT_MAX);
 	}
 
 	void Print()

@@ -5,6 +5,8 @@
 
 #include "Parser.h"
 
+#include "BattleParser.h"
+
 BattleDB g_BattleDB;
 
 BattleDB::BattleDB()
@@ -17,24 +19,54 @@ BattleDB::~BattleDB()
 
 bool BattleDB::Load(const wchar_t* const filename)
 {
-	using namespace Parser;
+	setlocale(LC_ALL, "");
 
-	CParser<CBattle>::funcList fList =
+	std::wifstream wis(filename, std::ifstream::binary);
+	if (false == wis.is_open())
+		return false;
+
+	// apply BOM-sensitive UTF-16 facet
+	wis.imbue(std::locale(wis.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
+
+	int nScriptLine = 0;
+	std::wstring wline;
+
+	wchar_t buf[2000];
+
+	BattleParser parser;
+
+	bool ret = true;
+	while (std::getline(wis, wline))	// 한 줄 읽어들인다.
 	{
-		[](CBattle& battle, Token& token)
-	{
-		battle.m_nID = ParseInt(token);
-	},
-		[](CBattle& battle, Token& token)
-	{
-		battle.m_nEnemyID = ParseInt(token);
+		memset(buf, 0, sizeof(buf));
+		wline._Copy_s(buf, 2000, wline.size(), 0);
+
+		ret = parser.Parse(buf);
 	}
-	};
 
-	CParser<CBattle> parser;
-
-	return parser.Load(filename, fList, m_BattleMap);
+	return true;
 }
+
+//bool BattleDB::Load(const wchar_t* const filename)
+//{
+//	using namespace Parser;
+//
+//	CParser<CBattle>::funcList fList =
+//	{
+//		[](CBattle& battle, Token& token)
+//	{
+//		battle.m_nID = ParseInt(token);
+//	},
+//		[](CBattle& battle, Token& token)
+//	{
+//		battle.m_nEnemyID = ParseInt(token);
+//	}
+//	};
+//
+//	CParser<CBattle> parser;
+//
+//	return parser.Load(filename, fList, m_BattleMap);
+//}
 
 void InitBattleDB_test()
 {

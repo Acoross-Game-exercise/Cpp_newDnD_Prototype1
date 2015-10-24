@@ -122,13 +122,13 @@ namespace AcorossScanner
 			//if (std::regex_match(input, wcm, word_regex, std::regex_constants::match_continuous))
 			if (std::regex_search(input, wcm, word_regex, std::regex_constants::match_continuous))
 			{
-				if (wcm[0].length() > nFoundStrLength)
+				//if (wcm[0].length() > nFoundStrLength)
 				{
-					nFoundStrLength = wcm[0].length();
+					nFoundStrLength = static_cast<int>(wcm[0].length());
 					ret.type = td.type;
 					ret.data = wcm[0];
 
-					//break;
+					break;
 				}
 			}
 		}

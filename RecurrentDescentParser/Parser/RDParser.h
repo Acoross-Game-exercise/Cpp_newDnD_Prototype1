@@ -23,23 +23,18 @@
 
 using namespace AcorossScanner;
 
-template <class _ScannerT, class _ParserSymbolType>
+template <class _ScannerT>
 class CRDParser
 {
 public:
 	using TokenType = typename _ScannerT::TokenType;
 	using TokenStruct = typename _ScannerT::Token;
-	using DeriveFuncSig = bool(typename _ParserSymbolType, typename CRDParser*);
-	using DeriveFuncType = typename std::function<DeriveFuncSig>;
 
-#define new_MATCH(eType) if (!parser->match(eType)) return false;
-#define DERIVE(symbol) if (!parser->Derive(symbol)) return false;
-#define EXPECT(eType) if (!parser->expect(eType)) return false;
+#define MATCH1(eType) if (!parser->match(eType)) break;
+#define MATCH2(val, eType)  wstring val = parser->input_token.data;\
+							if (!parser->match(eType)) break;
 
-	CRDParser(DeriveFuncSig* deriveF)
-		: m_DeriveFunc(deriveF)
-	{
-	}
+	CRDParser() = default;
 
 	~CRDParser() = default;
 	
@@ -67,39 +62,6 @@ public:
 	{
 		return input_token.type == eType;
 	}
-
-	// api: general, 
-	// contents: specific
-	bool Derive(const _ParserSymbolType eSymbol)
-	{
-		return m_DeriveFunc(eSymbol, this);
-	}
-
-	class IParserSymbolBase
-	{
-	public:
-		using TokenType = typename _ScannerT::TokenType;
-		using TokenStruct = typename _ScannerT::Token;
-
-		IParserSymbolBase() = default;
-		virtual ~IParserSymbolBase() = default;
-
-		bool DoDerive(CRDParser* parser)
-		{
-			if (Derive(parser))
-			{
-				OnDerived();
-				return true;
-			}
-			return false;
-		}
-
-		virtual bool Derive(CRDParser* parser) = 0;
-		virtual void OnDerived() = 0;
-	};
-
-private:
-	DeriveFuncType m_DeriveFunc;
 
 private:
 	NO_COPY(CRDParser);
