@@ -240,6 +240,8 @@ public:
 	CFunctionParser()
 	{}
 
+	NO_COPY(CFunctionParser);
+
 	void Run()
 	{
 		//FuncScanner scanner;
@@ -361,9 +363,6 @@ public:
 			std::cout << "ret=" << ret << std::endl;
 		}
 	}
-
-private:
-	NO_COPY(CFunctionParser);
 };
 
 

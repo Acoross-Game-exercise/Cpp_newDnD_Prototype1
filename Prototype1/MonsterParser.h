@@ -32,27 +32,17 @@ public:
 	}
 	SCANNERDEF_END;
 
+public:
+	MonsterParser() = default;
+	NO_COPY(MonsterParser);
+
 	typedef Scanner<FuncScannerDefine> FuncScanner;
-	
 	using TokenType = FuncScannerDefine::TokenType;
 	using MyParserType = CRDParser<FuncScanner>;
 
+public:
+	bool Parse(wchar_t* buf);
+
 	bool monsterdata(MonsterParser::MyParserType* parser);
 	std::unique_ptr<CSkill> skill(MonsterParser::MyParserType* parser);
-
-public:
-	MonsterParser() = default;
-
-	bool Parse(wchar_t* buf)
-	{
-		MyParserType parser;
-
-		parser.input = buf;
-		parser.input_token = FuncScanner::Scan(parser.input);
-
-		return monsterdata(&parser);
-	}
-
-private:
-	NO_COPY(MonsterParser);
 };

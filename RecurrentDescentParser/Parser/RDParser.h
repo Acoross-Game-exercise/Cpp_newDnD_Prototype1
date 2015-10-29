@@ -35,9 +35,9 @@ public:
 							if (!parser->match(eType)) break;
 
 	CRDParser() = default;
-
 	~CRDParser() = default;
-	
+	NO_COPY(CRDParser);
+
 	TokenStruct input_token;
 	wchar_t* input;
 
@@ -62,7 +62,4 @@ public:
 	{
 		return input_token.type == eType;
 	}
-
-private:
-	NO_COPY(CRDParser);
 };

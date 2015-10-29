@@ -54,6 +54,7 @@ public:
 
 public:
 	BattleParser() = default;
+	NO_COPY(BattleParser);
 
 	bool Parse(wchar_t* buf)
 	{
@@ -64,7 +65,4 @@ public:
 
 		return battledata(&parser);
 	}
-
-private:
-	NO_COPY(BattleParser);
 };

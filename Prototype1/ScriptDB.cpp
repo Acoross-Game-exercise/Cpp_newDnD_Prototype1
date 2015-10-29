@@ -16,6 +16,59 @@ namespace Script
 {
 	ScriptDB g_ScriptDB;
 
+	bool CScriptParser::scriptdata()
+	{
+		m_scene = CScene();
+
+		if (!sbegin()) return true;
+		if (line()) return false;
+		if (send()) return false;
+
+		CScene* pScene = new CScene;
+		pScene->SetData(m_scene);
+		g_ScriptDB.m_sceneMap[pScene->m_nID] = pScene;
+
+		return true;
+	}
+
+	bool CScriptParser::sbegin()
+	{
+		bool bRet = false;
+		MyParserType* parser = &m_RDParser;
+		do
+		{
+			MATCH1(TokenType::SB);
+			MATCH2(nScriptID, TokenType::DIGIT);
+
+			m_scene.m_nID = parser->parseInt(nScriptID.c_str());
+
+		} while (false);
+		return bRet;
+	}
+
+	bool CScriptParser::line()
+	{
+		bool bRet = false;
+		MyParserType* parser = &m_RDParser;
+		do
+		{
+			MATCH2(str, TokenType::ANYWORD);
+			m_scene.m_Script.push_back(str);
+		} while (false);
+		return bRet;
+	}
+
+	bool CScriptParser::send()
+	{
+		bool bRet = false;
+		MyParserType* parser = &m_RDParser;
+		do
+		{
+			MATCH1(TokenType::SE);
+		} while (false);
+		return bRet;
+	}
+
 	bool __stdcall RunScript(int nNum)
 	{
 		Script::CScene* pScene = Script::g_ScriptDB.m_sceneMap[nNum];
@@ -82,6 +135,36 @@ namespace Script
 		};
 
 		return parser.Load(filename, m_sceneMap, f);
+	}
+
+	bool ScriptDB::Load3(const wchar_t * const filename)
+	{
+		setlocale(LC_ALL, "");
+
+		std::wifstream wis(filename, std::ifstream::binary);
+		if (false == wis.is_open())
+			return false;
+
+		// apply BOM-sensitive UTF-16 facet
+		wis.imbue(std::locale(wis.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
+
+		int nScriptLine = 0;
+		std::wstring wline;
+
+		wchar_t buf[2000];
+
+		CScriptParser parser;
+
+		bool ret = true;
+		while (std::getline(wis, wline))	// 한 줄 읽어들인다.
+		{
+			memset(buf, 0, sizeof(buf));
+			wline._Copy_s(buf, 2000, wline.size(), 0);
+
+			ret = parser.Parse(buf);
+		}
+
+		return true;
 	}
 
 	// Script 파일을 읽어들인다.

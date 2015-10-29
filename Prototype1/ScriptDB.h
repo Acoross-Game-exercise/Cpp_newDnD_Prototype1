@@ -7,6 +7,8 @@
 
 #include "Util.h"
 
+#include "../RecurrentDescentParser/Parser/RDParser.h"
+
 namespace Script
 {
 	// Scene begin ///////////////
@@ -38,6 +40,7 @@ namespace Script
 	public:
 		bool Load(const wchar_t* const filename);
 		bool Load2(const wchar_t* const filename);
+		bool Load3(const wchar_t* const filename);
 
 		SceneMap m_sceneMap;
 
@@ -56,6 +59,59 @@ namespace Script
 	
 	bool __stdcall RunScript(int nNum);
 	bool __stdcall RunScript(ScriptData& sd, unsigned long dwMilliSeconds = DEFAULT_WAIT);
+
+
+	class CScriptParser
+	{
+	public:
+		///////////////////////////////
+		// IMPL 
+		SCANNERDEF_BEGIN(ScannerDefine)
+		{
+			/*add_token(TK_NULL, nullptr), \
+			*/
+#define token_list  \
+	add_token(COMMENT, L"//(.*)"),	\
+	add_token(SE, L"@send"),	\
+	add_token(SB, L"@s[ \t]+"),	\
+	add_token(CMD, L"@"),	\
+	add_token(DIGIT, L"(-)?[1-9]([0-9]*)[ \t]+"), \
+	add_token(ANYWORD, L"([^\n\r])+[\n\r]"), \
+	add_token(TK_MAX, nullptr)
+
+#include "../RecurrentDescentParser/Scanner/ScannerImplMacro.inc"
+
+#undef token_list
+		}
+		SCANNERDEF_END;
+
+		using TokenType = ScannerDefine::TokenType;
+		using Scanner = Scanner<ScannerDefine>;
+		using MyParserType = CRDParser<Scanner>;
+
+	public:
+		CScriptParser() = default;
+		~CScriptParser() = default;
+		NO_COPY(CScriptParser);
+
+	public:
+		bool Parse(wchar_t* buf)
+		{
+			m_RDParser.input = buf;
+			m_RDParser.input_token = Scanner::Scan(m_RDParser.input);
+
+			return scriptdata();
+		}
+
+		bool scriptdata();
+		bool sbegin();
+		bool line();
+		bool send();
+
+	private:
+		MyParserType m_RDParser;
+		CScene m_scene;
+	};
 }
 
 #endif

@@ -5,6 +5,16 @@
 #include "CCreature.h"
 #include "MonsterDB.h"
 
+bool MonsterParser::Parse(wchar_t * buf)
+{
+	MyParserType parser;
+
+	parser.input = buf;
+	parser.input_token = FuncScanner::Scan(parser.input);
+
+	return monsterdata(&parser);
+}
+
 bool MonsterParser::monsterdata(MonsterParser::MyParserType* parser)
 {
 	if (parser->expect(TokenType::COMMENT))

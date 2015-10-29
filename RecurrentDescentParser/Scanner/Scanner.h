@@ -41,9 +41,8 @@ namespace AcorossScanner
 		};
 		
 	public:
-		Scanner()
-		{
-		}
+		Scanner() = default;
+		NO_COPY(Scanner);
 
 		static Token Scan(wchar_t*& input);
 
@@ -52,9 +51,6 @@ namespace AcorossScanner
 		{
 			++(input);
 		}
-
-	private:
-		NO_COPY(Scanner);
 	};
 	
 	template <typename ScannerDefine>
@@ -79,7 +75,7 @@ namespace AcorossScanner
 				{
 				case L' ':
 				case L'\t':
-				case L'\n':
+				//case L'\n':
 					get_next_char(input);
 					break;
 				default:

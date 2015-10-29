@@ -4,8 +4,8 @@
 	TypeName() = default;
 
 #define NO_COPY(TypeName) \
-  TypeName(const TypeName&);   \
-  void operator=(const TypeName&);
+  TypeName(const TypeName&) = delete;   \
+  void operator=(const TypeName&) = delete;
 
 #define ASSERT(cond)\
 if (!(cond))\

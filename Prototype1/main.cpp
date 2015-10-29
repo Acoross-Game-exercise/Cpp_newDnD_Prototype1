@@ -50,22 +50,14 @@ int main(int argc, char* argv[])
 #ifdef _DEBUG
 	//Script::g_ScriptDB.Load(L"script_test.txt");
 	Script::g_ScriptDB.Load2(L"script_test.txt");
+	//Script::g_ScriptDB.Load3(L"script_test.txt");
 #else
 	Script::g_ScriptDB.Load(L"script.txt");
 #endif
 	
 	if (!g_monsterDB.Load(L"monster.csv")) return 0;
-
-	{
-		if (!g_BattleDB.Load(L"battledata.csv")) return 0;
-		/*g_BattleDB.m_BattleMap[1]->RunBattle();
-		g_BattleDB.m_BattleMap[2]->RunBattle();
-		g_BattleDB.m_BattleMap[3]->RunBattle();*/
-	}
-
-	{
-		if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
-	}
+	if (!g_BattleDB.Load(L"battledata.csv")) return 0;
+	if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
 	
 	Scene::CScene* pScene = Scene::g_SceneDB.m_SceneMap[1];
 	if (pScene)
