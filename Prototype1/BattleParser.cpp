@@ -1,5 +1,7 @@
 #include "BattleParser.h"
 
+#include <iostream>
+
 #include "BattleDB.h"
 #include "Battle.h"
 #include "BattleEventHandler.h"
@@ -69,6 +71,7 @@ CBattle::OnBattleEvent BattleParser::battleevent(BattleParser::MyParserType* par
 		}
 		else if (name.compare(L"end_battle") == 0)
 		{
+			DEBUG_OUTPUT("end_battle");
 			MATCH1(TokenType::LPAREN);
 			MATCH1(TokenType::RPAREN);
 
@@ -76,6 +79,7 @@ CBattle::OnBattleEvent BattleParser::battleevent(BattleParser::MyParserType* par
 		}
 		else if (name.compare(L"set_enemy_tohitbonus") == 0)
 		{
+			DEBUG_OUTPUT("set_enemy_tohitbonus");
 			MATCH1(TokenType::LPAREN);
 			MATCH2(pow, TokenType::DIGIT);
 			MATCH1(TokenType::RPAREN);
@@ -85,6 +89,7 @@ CBattle::OnBattleEvent BattleParser::battleevent(BattleParser::MyParserType* par
 		}
 		else if (name.compare(L"run_script") == 0)
 		{
+			DEBUG_OUTPUT("run_script");
 			MATCH1(TokenType::LPAREN);
 			MATCH2(scriptId, TokenType::DIGIT);
 			MATCH1(TokenType::RPAREN);
@@ -94,6 +99,7 @@ CBattle::OnBattleEvent BattleParser::battleevent(BattleParser::MyParserType* par
 		}
 		else if (name.compare(L"cond_round_at") == 0)
 		{
+			DEBUG_OUTPUT("cond_round_at");
 			MATCH1(TokenType::LPAREN);
 			MATCH2(roundAt, TokenType::DIGIT);
 			MATCH1(TokenType::COMMA);

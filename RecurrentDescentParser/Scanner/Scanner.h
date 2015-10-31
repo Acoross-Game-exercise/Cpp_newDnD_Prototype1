@@ -75,7 +75,6 @@ namespace AcorossScanner
 				{
 				case L' ':
 				case L'\t':
-				//case L'\n':
 					get_next_char(input);
 					break;
 				default:

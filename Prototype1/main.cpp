@@ -3,6 +3,8 @@
 #include <time.h>
 #include <algorithm>
 #include <string>
+#include <regex>
+#include <iterator>
 
 // for init
 #include "ScriptDB.h"
@@ -27,6 +29,16 @@ int main(int argc, char* argv[])
 {
 	setlocale(LC_ALL, "");
 
+
+	//wstring teststr = L"Å×½ºÆ®: ¾À1\r\n";
+	//std::wcmatch wcm;
+	//std::wregex word_regex(L"(.*)[\r\n]");
+	////if (std::regex_match(input, wcm, word_regex, std::regex_constants::match_continuous))
+	//if (std::regex_search(teststr.c_str(), wcm, word_regex, std::regex_constants::match_continuous))
+	//{
+	//	cout << "found!" << endl;
+	//}
+
 	srand(static_cast<unsigned int>(time(nullptr)));
 	
 	// InitCharacter
@@ -47,14 +59,7 @@ int main(int argc, char* argv[])
 		g_PC.m_AttackPower = 1;
 	}
 	
-#ifdef _DEBUG
-	//Script::g_ScriptDB.Load(L"script_test.txt");
-	Script::g_ScriptDB.Load2(L"script_test.txt");
-	//Script::g_ScriptDB.Load3(L"script_test.txt");
-#else
-	Script::g_ScriptDB.Load(L"script.txt");
-#endif
-	
+	if (!Script::g_ScriptDB.Load3(L"script.txt")) return 0;
 	if (!g_monsterDB.Load(L"monster.csv")) return 0;
 	if (!g_BattleDB.Load(L"battledata.csv")) return 0;
 	if (!Scene::g_SceneDB.Load(L"scene.txt")) return 0;
@@ -65,8 +70,6 @@ int main(int argc, char* argv[])
 		pScene->Run();
 	}
 
-	//Scene::RunScenes();
-	
 	system("pause");
 
 	return 0;

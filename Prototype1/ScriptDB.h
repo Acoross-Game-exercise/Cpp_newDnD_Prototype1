@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <fstream>
 
 #include "Util.h"
 
@@ -72,11 +73,11 @@ namespace Script
 			*/
 #define token_list  \
 	add_token(COMMENT, L"//(.*)"),	\
+	add_token(LINEEND, L"[\r\n]+"),	\
 	add_token(SE, L"@send"),	\
 	add_token(SB, L"@s[ \t]+"),	\
-	add_token(CMD, L"@"),	\
-	add_token(DIGIT, L"(-)?[1-9]([0-9]*)[ \t]+"), \
-	add_token(ANYWORD, L"([^\n\r])+[\n\r]"), \
+	add_token(DIGIT, L"(-)?[1-9]([0-9]*)([ \t]*)"), \
+	add_token(ANYWORD, L"([^\r\n]+)"), \
 	add_token(TK_MAX, nullptr)
 
 #include "../RecurrentDescentParser/Scanner/ScannerImplMacro.inc"

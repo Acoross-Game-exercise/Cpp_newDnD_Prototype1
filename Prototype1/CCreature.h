@@ -63,17 +63,11 @@ public:
 	}
 
 	virtual ~CCreature();
-
 	virtual void OnHealed(int nHealed);
-
 	virtual void OnDamaged(int nDamage);
-
 	virtual void OnHitMessage();
-
 	virtual void OnMissMessage();
-	
 	virtual bool CheckResistance(ResistanceType RT) { return true; };
-
 	virtual bool DoAttack(CBattle* pBattle, CCreature* pEnemy);
 };
 

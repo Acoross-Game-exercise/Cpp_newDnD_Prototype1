@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include <fstream>
 #include <locale>
 #include <codecvt>
 #include <string>
@@ -20,13 +19,38 @@ namespace Script
 	{
 		m_scene = CScene();
 
-		if (!sbegin()) return true;
-		if (line()) return false;
-		if (send()) return false;
+		while (false == m_RDParser.match(TokenType::TK_MAX))
+		{
+			if (m_RDParser.match(TokenType::COMMENT))
+				continue;
 
-		CScene* pScene = new CScene;
-		pScene->SetData(m_scene);
-		g_ScriptDB.m_sceneMap[pScene->m_nID] = pScene;
+			if (m_RDParser.match(TokenType::LINEEND))
+				continue;
+
+			if (false == m_RDParser.expect(TokenType::SB))
+			{
+				m_RDParser.getNextToken();
+				continue;
+			}
+
+			if (!sbegin())
+				return false;
+
+			while (true)
+			{
+				if (m_RDParser.expect(TokenType::SE))
+				{
+					if (!send()) 
+						return false;
+					break;
+				}
+				else
+				{
+					if (!line()) 
+						return false;
+				}
+			}
+		}
 
 		return true;
 	}
@@ -39,8 +63,10 @@ namespace Script
 		{
 			MATCH1(TokenType::SB);
 			MATCH2(nScriptID, TokenType::DIGIT);
+			MATCH1(TokenType::LINEEND);
 
 			m_scene.m_nID = parser->parseInt(nScriptID.c_str());
+			bRet = true;
 
 		} while (false);
 		return bRet;
@@ -48,14 +74,35 @@ namespace Script
 
 	bool CScriptParser::line()
 	{
-		bool bRet = false;
+		wstring str;
 		MyParserType* parser = &m_RDParser;
 		do
 		{
-			MATCH2(str, TokenType::ANYWORD);
-			m_scene.m_Script.push_back(str);
-		} while (false);
-		return bRet;
+			if (parser->expect(TokenType::LINEEND))
+			{
+				// remove '\r'
+				str = Script::RemoveReturnChar(str);
+
+				// replace "//n" -> '/n'
+				size_t idx = str.find(L"\\n");
+				while (idx != std::wstring::npos)
+				{
+					str.replace(idx, 2, L"\n");
+					idx = str.find(L"\\n");
+				}
+
+				parser->getNextToken();
+				m_scene.m_Script.push_back(str);
+				return true;
+			}
+			else
+			{
+				str += parser->input_token.data;
+				parser->getNextToken();
+			}
+		} while (false == parser->expect(TokenType::TK_MAX));
+
+		return false;
 	}
 
 	bool CScriptParser::send()
@@ -65,7 +112,15 @@ namespace Script
 		do
 		{
 			MATCH1(TokenType::SE);
+			MATCH1(TokenType::LINEEND);
+
+			CScene* pScene = new CScene;
+			pScene->SetData(m_scene);
+			g_ScriptDB.m_sceneMap[pScene->m_nID] = pScene;
+			bRet = true;
+
 		} while (false);
+
 		return bRet;
 	}
 
@@ -144,25 +199,23 @@ namespace Script
 		std::wifstream wis(filename, std::ifstream::binary);
 		if (false == wis.is_open())
 			return false;
-
+		
 		// apply BOM-sensitive UTF-16 facet
 		wis.imbue(std::locale(wis.getloc(), new std::codecvt_utf16<wchar_t, 0x10ffff, std::consume_header>));
+		
+		wis.seekg(0, std::ios::end);
+		std::streamsize size = wis.tellg() / sizeof(wchar_t);
+		wis.seekg(0, std::ios::beg);
 
-		int nScriptLine = 0;
-		std::wstring wline;
-
-		wchar_t buf[2000];
-
+		wchar_t* buf = new wchar_t[size];
+		wis.read(buf, size);
+		
 		CScriptParser parser;
+		parser.Parse(buf);
 
-		bool ret = true;
-		while (std::getline(wis, wline))	// 한 줄 읽어들인다.
-		{
-			memset(buf, 0, sizeof(buf));
-			wline._Copy_s(buf, 2000, wline.size(), 0);
-
-			ret = parser.Parse(buf);
-		}
+		wis.close();
+		
+		delete[] buf;
 
 		return true;
 	}

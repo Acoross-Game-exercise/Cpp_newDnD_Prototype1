@@ -53,6 +53,13 @@ public:
 		return false;
 	}
 
+	bool getNextToken()
+	{
+		input_token = _ScannerT::Scan(input);	// consume input_token
+
+		return true;
+	}
+
 	int parseInt(const wchar_t* str)
 	{
 		return std::wcstol(str, nullptr, 10);

@@ -243,7 +243,7 @@ namespace Scene
 
 		CMultilineParser<CScene>::ParserFunc func = [](CScene& scene, std::wstring wline)
 		{
-			wprintf_s(L"%s\n", wline.c_str());
+			//wprintf_s(L"%s\n", wline.c_str());
 			scene.m_SceneFuncList.push_back(ParseFunction(wline.c_str()));
 		};
 

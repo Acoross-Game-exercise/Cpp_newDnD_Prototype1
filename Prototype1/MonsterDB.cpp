@@ -41,6 +41,8 @@ bool MonsterDB::Load(const wchar_t* const filename)
 		ret = parser.Parse(buf);
 	}
 
+	wis.close();
+
 	return true;
 }
 
